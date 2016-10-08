@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">MyStepCounter</string>
+    <string name="tab_weibo">weibo</string>
+    <string name="action_search">search</string>
+    <string name="action_group_chat">group</string>
+    <string name="action_add_friend">add</string>
+    <string name="action_scan">scan</string>
+    <string name="action_feed">feed</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="fragment_home">今天</string>
+    <string name="fragment_group">Fragment Group</string>
+    <string name="fragment_statistics">Fragment Statistics</string>
+    <string name="fragment_user">Fragment User</string>
+    <string name="inner_text">the text </string>
+    <string name="btn_start">开始</string>
+    <string name="btn_resume">继续</string>
+    <string name="btn_pause">歇一下</string>
+    <string name="no_data">目前还没有你的数据</string>
+    <string name="distance">行走距离</string>
+    <string name="step_count_today">当日行走</string>
+    <string name="kal_count">消耗卡路里</string>
+    <string name="username">zsw</string>
+    <string name="title_home">主页</string>
+    <string name="title_group">好友</string>
+    <string name="title_statistics">统计</string>
+    <string name="title_user">我</string>
+
+</resources>

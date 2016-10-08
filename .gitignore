@@ -1,0 +1,13 @@
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+
+
+/app/src/androidTest/
+/app/src/test/
+/mystepcounter/src/androidTest/
+/mystepcounter/src/test/
