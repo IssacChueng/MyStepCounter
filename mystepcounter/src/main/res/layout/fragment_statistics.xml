@@ -19,7 +19,7 @@
         android:layout_weight="1"
         app:progress="1"
         app:time_text="date"
-        app:text_normal_color="#ff000000"
+        app:text_normal_color="#99AA99"
         app:text_change_color="#ffff0000"
         app:time_text_size="18sp"/>
     <com.issac.mystepcounter.view.ColorTextStrip
@@ -29,7 +29,7 @@
         android:layout_weight="1"
         app:progress="1"
         app:time_text="week"
-        app:text_normal_color="#ff000000"
+        app:text_normal_color="#99AA99"
         app:text_change_color="#ffff0000"
         app:time_text_size="18sp"/>
     <com.issac.mystepcounter.view.ColorTextStrip
@@ -39,7 +39,7 @@
         android:layout_weight="1"
         app:progress="1"
         app:time_text="month"
-        app:text_normal_color="#ff000000"
+        app:text_normal_color="#99AA99"
         app:text_change_color="#ffff0000"
         app:time_text_size="18sp"/>
 </LinearLayout>

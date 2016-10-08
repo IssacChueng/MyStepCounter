@@ -24,6 +24,11 @@
     <string name="title_home">主页</string>
     <string name="title_group">好友</string>
     <string name="title_statistics">统计</string>
-    <string name="title_user">我</string>
+    <string name="title_user"></string>
+    <string name="weibo">微博绑定</string>
+    <string name="notice">我的通知</string>
+    <string name="recommend">我的推荐</string>
+    <string name="share_user">我的分享</string>
+    <string name="info">关于应用</string>
 
 </resources>
