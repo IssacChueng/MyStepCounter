@@ -3,3 +3,4 @@
 
 ![alt tag](https://github.com/IssacChueng/MyStepCounter/blob/master/design/fragment_home.PNG?raw=true)
 ![alt tag](https://github.com/IssacChueng/MyStepCounter/blob/master/design/fragment_statistics.PNG?raw=true)
+![alt tag](https://github.com/IssacChueng/MyStepCounter/blob/master/design/fragment_user.PNG?raw=true)
