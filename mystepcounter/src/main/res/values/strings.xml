@@ -30,5 +30,10 @@
     <string name="recommend">我的推荐</string>
     <string name="share_user">我的分享</string>
     <string name="info">关于应用</string>
+    <string name="speed_rank">速度榜</string>
+    <string name="distance_rank">距离榜</string>
+    <string name="item_info">已坚持xx公里</string>
+    <string name="item_name">晒我回复</string>
+    <string name="challenge">挑战</string>
 
 </resources>

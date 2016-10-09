@@ -8,11 +8,11 @@
     android:orientation="vertical">
 
     <include layout="@layout/title"></include>
-    <android.support.v4.view.ViewPager
+    <com.issac.mystepcounter.view.NoScrollViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"></android.support.v4.view.ViewPager>
+        android:layout_weight="1"></com.issac.mystepcounter.view.NoScrollViewPager>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="5dp"
-            app:micon="@mipmap/ic_group"/>
+            app:micon="@mipmap/ic_ranking"/>
         <com.issac.mystepcounter.view.ChangeColorWithIconView
             android:id="@+id/statistics"
             android:layout_width="0dp"

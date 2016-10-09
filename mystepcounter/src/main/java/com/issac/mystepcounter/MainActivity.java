@@ -22,6 +22,7 @@ import com.issac.mystepcounter.fragment.FragmentStatistics;
 import com.issac.mystepcounter.fragment.FragmentUser;
 import com.issac.mystepcounter.view.ChangeColorWithIconView;
 import com.issac.mystepcounter.view.CircleImageView;
+import com.issac.mystepcounter.view.NoScrollViewPager;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -31,7 +32,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements
         ViewPager.OnPageChangeListener, View.OnClickListener, OnChartValueSelectedListener
 {
-    private ViewPager mViewPager;
+    private NoScrollViewPager mViewPager;
     private List<Fragment> mTabs = new ArrayList<Fragment>();
     private FragmentPagerAdapter mAdapter;
     private ImageView img_share;
@@ -49,7 +50,8 @@ public class MainActivity extends AppCompatActivity implements
 
         setOverflowShowingAlways();
         //getActionBar().setDisplayShowHomeEnabled(false);
-        mViewPager = (ViewPager) findViewById(R.id.viewPager);
+        mViewPager = (NoScrollViewPager) findViewById(R.id.viewPager);
+        mViewPager.setNoScroll(true);
         img_share = (ImageView) findViewById(R.id.img_share);
         img_avatar = (CircleImageView) findViewById(R.id.img_avatar);
         textTitle = (TextView) findViewById(R.id.text_title);

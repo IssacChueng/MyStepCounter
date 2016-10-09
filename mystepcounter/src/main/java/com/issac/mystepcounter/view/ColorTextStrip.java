@@ -30,12 +30,14 @@ public class ColorTextStrip extends View {
 
     private String mText = "zsw";
     private Paint mPaint;
+    private Paint linePaint;
     private int mTextSize = sp2px(getContext(),30f);
 
     private int mTextNormalColor = 0xff000000;
     private int mTextChangeColor = 0xffff0000;
 
     private Rect mTextBound = new Rect();
+    private Rect lineBound = new Rect();
     private int mTextWidth;
 
     private int mRealWidth;
@@ -55,6 +57,7 @@ public class ColorTextStrip extends View {
     public ColorTextStrip(Context context, AttributeSet attrs) {
         super(context, attrs);
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.ColorTextStrip);
         mText = ta.getString(R.styleable.ColorTextStrip_time_text);
         mTextSize = ta.getDimensionPixelSize(R.styleable.ColorTextStrip_time_text_size,mTextSize);
@@ -65,12 +68,16 @@ public class ColorTextStrip extends View {
         ta.recycle();
         mPaint.setTextSize(mTextSize);
         mPaint.setColor(mTextNormalColor);
+        linePaint.setColor(mTextChangeColor);
+        linePaint.setAlpha(0);
+        linePaint.setStrokeWidth(10f);
         measureText();
     }
 
     private void measureText() {
         mTextWidth = (int) mPaint.measureText(mText);
         mPaint.getTextBounds(mText,0,mText.length(),mTextBound);
+
     }
 
     @Override
@@ -135,18 +142,21 @@ public class ColorTextStrip extends View {
 
     private void drawText(Canvas canvas, int endX) {
         canvas.save(Canvas.CLIP_SAVE_FLAG);
-        canvas.clipRect(0,0,endX,getMeasuredHeight());
+        canvas.clipRect(0,0,endX,getMeasuredHeight()+10);
         canvas.drawText(mText,mTextStartX,getMeasuredHeight()/2+mTextBound.height()/2,mPaint);
+        canvas.drawLine(mTextStartX,getMeasuredHeight(),endX,getMeasuredHeight(),linePaint);
         canvas.restore();
     }
 
-    public void drawColor() {
+    public void drawColor(int alpha) {
         mPaint.setColor(mTextChangeColor);
+        linePaint.setAlpha(alpha);
         invalidate();
 
     }
     public void resetColor(){
         mPaint.setColor(mTextNormalColor);
+        linePaint.setAlpha(0);
         invalidate();
 
     }

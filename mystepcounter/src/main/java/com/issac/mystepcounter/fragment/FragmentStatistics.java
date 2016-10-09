@@ -29,6 +29,7 @@ import com.issac.mystepcounter.utils.MyMonthFormatter;
 import com.issac.mystepcounter.utils.MyWeekFormatter;
 import com.issac.mystepcounter.view.ColorTextStrip;
 import com.issac.mystepcounter.view.MyMarkerView;
+import com.issac.mystepcounter.view.NoScrollViewPager;
 
 
 import java.util.ArrayList;
@@ -117,7 +118,7 @@ public class FragmentStatistics extends Fragment implements View.OnClickListener
         viewContainer.add(mLineChartMonth);
         viewContainer.add(mLineChartWeek);
         tab1 = (ColorTextStrip) view.findViewById(R.id.tab_1);
-        tab1.drawColor();
+        tab1.drawColor(255);
         tab2 = (ColorTextStrip) view.findViewById(R.id.tab_2);
         tab3 = (ColorTextStrip) view.findViewById(R.id.tab_3);
         tab1.setOnClickListener(this);
@@ -176,7 +177,7 @@ public class FragmentStatistics extends Fragment implements View.OnClickListener
                 Log.i(tag,"onPageSelected position:"+position);
                 ColorTextStrip now = titleContainer.get(position);
                 ColorTextStrip old = titleContainer.get(p);
-                now.drawColor();
+                now.drawColor(255);
                 old.resetColor();
                 p=position;
 
@@ -309,12 +310,15 @@ public class FragmentStatistics extends Fragment implements View.OnClickListener
         switch (v.getId()){
             case R.id.tab_1:
                 pager.setCurrentItem(0,false);
+                Log.d(tag,"0");
                 break;
             case R.id.tab_2:
                 pager.setCurrentItem(1,false);
+                Log.d(tag,"1");
                 break;
             case R.id.tab_3:
                 pager.setCurrentItem(2,false);
+                Log.d(tag,"2");
                 break;
         }
     }

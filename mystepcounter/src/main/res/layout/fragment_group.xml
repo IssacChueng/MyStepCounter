@@ -1,13 +1,71 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.FragmentGroup">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragment.FragmentGroup"
+    android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/fragment_group" />
+        android:layout_height="40dp"
+        android:orientation="horizontal">
+        <com.issac.mystepcounter.view.ColorTextStrip
+            android:id="@+id/tab_rank_1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:progress="1"
+            app:time_text="@string/speed_rank"
+            app:text_normal_color="#99AA99"
+            app:text_change_color="#ffff0000"
+            app:time_text_size="18sp"/>
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@android:color/darker_gray"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            />
+        <com.issac.mystepcounter.view.ColorTextStrip
+            android:id="@+id/tab_rank_2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:progress="1"
+            app:time_text="@string/distance_rank"
+            app:text_normal_color="#99AA99"
+            app:text_change_color="#ffff0000"
+            app:time_text_size="18sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:orientation="horizontal">
+        <View
+            android:id="@+id/line_rank_1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/percentageTextBackground"/>
+        <View
+            android:id="@+id/line_rank_2"
+            android:visibility="invisible"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/percentageTextBackground"/>
+    </LinearLayout>
 
-</FrameLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@android:color/darker_gray"/>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager_rank"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v4.view.ViewPager>
+
+</LinearLayout>
