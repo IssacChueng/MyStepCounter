@@ -20,7 +20,7 @@
         app:progress="1"
         app:time_text="date"
         app:text_normal_color="#99AA99"
-        app:text_change_color="#ffff0000"
+        app:text_change_color="@color/tabStrip"
         app:time_text_size="18sp"/>
     <com.issac.mystepcounter.view.ColorTextStrip
         android:id="@+id/tab_2"
@@ -30,7 +30,7 @@
         app:progress="1"
         app:time_text="week"
         app:text_normal_color="#99AA99"
-        app:text_change_color="#ffff0000"
+        app:text_change_color="@color/tabStrip"
         app:time_text_size="18sp"/>
     <com.issac.mystepcounter.view.ColorTextStrip
         android:id="@+id/tab_3"
@@ -40,7 +40,7 @@
         app:progress="1"
         app:time_text="month"
         app:text_normal_color="#99AA99"
-        app:text_change_color="#ffff0000"
+        app:text_change_color="@color/tabStrip"
         app:time_text_size="18sp"/>
 </LinearLayout>
 <android.support.v4.view.ViewPager
@@ -89,6 +89,7 @@
                 android:layout_height="wrap_content"
                 android:src="@mipmap/ic_foots"
                 android:layout_marginRight="10dp"
+                android:tint="@color/tabStrip"
                 />
             <TextView
                 android:layout_weight="7"
@@ -134,6 +135,7 @@
                 android:layout_height="wrap_content"
                 android:src="@mipmap/ic_distance"
                 android:layout_marginRight="10dp"
+                android:tint="@color/tabStrip"
                 />
             <TextView
                 android:layout_weight="7"
@@ -179,6 +181,7 @@
                 android:layout_height="wrap_content"
                 android:src="@mipmap/ic_energy"
                 android:layout_marginRight="10dp"
+                android:tint="@color/tabStrip"
                 />
             <TextView
                 android:layout_weight="7"

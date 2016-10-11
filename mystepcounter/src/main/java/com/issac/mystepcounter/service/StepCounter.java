@@ -1,0 +1,90 @@
+package com.issac.mystepcounter.service;
+
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.issac.mystepcounter.pojo.StepValues;
+import com.issac.mystepcounter.utils.DbUtils;
+import com.issac.mystepcounter.utils.RingBuffer;
+
+/**
+ * Created by Administrator on 2016/10/10.
+ */
+
+public class StepCounter implements SensorEventListener {
+    //波峰检测窗口
+    static RingBuffer<Float> tempValues = new RingBuffer<>();
+    //当前步数
+    public static int stepCountInHour=0;
+    //过滤前6步，这集步数据不稳定
+    private static int tempStep=0;
+    //开始计步
+    static boolean flag=false;
+
+    Context context;
+    public StepCounter(Context context){
+        super();
+        this.context = context;
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        float[] values = event.values;
+        for (float v: values) {
+            Log.i("main","v = "+v);
+        }
+
+        //求平方和
+        float value = pow(values);
+        tempValues.add(value);
+        //测试
+        StepValues v = new StepValues();
+        v.setValue(value+"");
+        DbUtils.insert(v);
+        /*StepTemp stepTemp = new StepTemp();
+        stepTemp.setSteps(value+"");
+        Log.i("main","is liteOrm == null"+(DbUtils.liteOrm==null));
+        DbUtils.insert(stepTemp);
+        stepCountInHour++;
+        tempValues.add(value);
+        Intent intent = new Intent("stepcount");
+        intent.putExtra("stepCount",(int)value);
+        context.sendBroadcast(intent);
+        Log.i("Tag",value+"");*/
+        //检测波峰，如果检测到波峰且可以计步，stepCountInHour++;
+        Log.i("tag","tempStep="+tempStep);
+        Log.i("tag","size="+tempValues.size());
+        if (tempValues.hasPeak()){
+            if (!flag){
+                tempStep++;
+                if (tempStep>6){
+                    flag=true;
+                }
+            }else {
+                stepCountInHour++;
+                Toast.makeText(context, stepCountInHour + "", Toast.LENGTH_SHORT).show();
+                Log.i("Tag", stepCountInHour + "");
+            }
+        }
+    }
+
+
+    private float pow(float[] values){
+        float result = 0f;
+        for (float value: values) {
+            Log.i("value",value+"");
+            result =result+
+                    (float)Math.pow(value,2);
+        }
+        return result;
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+}

@@ -30,7 +30,7 @@ public class ChangeColorWithIconView extends View {
     /**
      * 颜色
      */
-    private int mColor = 0xFF45C01A;
+    private int mColor = 0x14B9D6;
     /**
      * 透明度 0.0-1.0
      */
@@ -66,7 +66,7 @@ public class ChangeColorWithIconView extends View {
                     mIconBitmap = drawable.getBitmap();
                     break;
                 case R.styleable.ChangeColorIconView_mcolor:
-                    mColor = a.getColor(attr, 0xff3300);
+                    mColor = a.getColor(attr, 0x14B9D6);
                     break;
 
 
@@ -114,7 +114,7 @@ public class ChangeColorWithIconView extends View {
                 Bitmap.Config.ARGB_8888);
         mCanvas = new Canvas(mBitmap);
         mPaint = new Paint();
-        mPaint.setColor(0xff3300);
+        mPaint.setColor(0x14B9D6);
         Log.i("Main",mColor+"");
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);

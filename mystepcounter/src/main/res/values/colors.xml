@@ -7,9 +7,10 @@
     <color name="avatarBorder">#AAAAAA</color>
 
     <color name="percentageFillColor">#14B9D6</color>
-    <color name="percentageUnfilledColor">#AAAAAA</color>
+    <color name="percentageBackColor">#CCCCCC</color>
     <color name="percentageTextBackground">#323A45</color>
     <color name="percentageTextColor">#FFFFFF</color>
     <color name="lineandcircle">#FF3300</color>
-    <color name="userBack">#99AA99</color>
+    <color name="userBack">#DDDDDD</color>
+    <color name="tabStrip">#14B9D6</color>
 </resources>

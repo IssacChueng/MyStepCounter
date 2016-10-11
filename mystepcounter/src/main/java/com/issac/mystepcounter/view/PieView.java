@@ -28,28 +28,39 @@ import com.issac.mystepcounter.annotation.FloatRange;
  */
 public class PieView extends View {
     private RelativeLayout baseLayout;
-    private String mPercentageText = "";
-    private String mCenterBtnText = "";
+    private String mPercentageText = "你已坚持了";
+    private String mSecondText="步";//中间步数
+    private String mCenterBtnText = "开始";
     private Button mBtnStart;
-    private int mPercentageSize;
+    private int mPercentageSize;        //步数字体大小
     private int mInnerCirclePadding;
     private Paint mPercentageFill;
     private Paint mBackgroundFill;
 
-    private Paint mCenterFill;
-    private Paint mCenterBtn;
+    //分段
+    private float mSectionRatio = 5.0f;
+    private float mRingRadius = 0.15f;
+    private RectF mSectionRect;
+    private Paint mSectionPaint;
+
+    //text
     private Paint mTextPaint;
     private Paint mBtnTextPaint;
-    private RectF mRect;
+    private Paint mCenterFill;
+    private Paint mCenterBtn;
+
     private RectF mRectCent;
     private Rect mTextBounds;
     private Rect mBtnTextBounds;
     private int mTextWidth, mTextHeight;
     private int mBtnTextWidth,mBtnTextHeight;
 
-    private float mPercentage = 0;
+    private float mPercentage = 0;  //步数占比，总数5000
     private float mCurrentPercentage = 0;
     private int percentPercent=1;
+    private float mCenterX;
+    private float mCenterY;
+    private float mRadius;
 
     public PieView(Context context) {
         super(context);
@@ -108,9 +119,9 @@ public class PieView extends View {
         mPercentageFill.setAntiAlias(true);
         mPercentageFill.setStyle(Paint.Style.FILL);
         mBackgroundFill = new Paint();
-        mBackgroundFill.setColor(ContextCompat.getColor(getContext(),R.color.percentageUnfilledColor));
+        mBackgroundFill.setColor(ContextCompat.getColor(getContext(),R.color.percentageBackColor));
         mBackgroundFill.setAntiAlias(true);
-        mBackgroundFill.setStyle(Paint.Style.STROKE);
+        mBackgroundFill.setStyle(Paint.Style.FILL);
 
         mCenterBtn = new Paint();
         mCenterBtn.setColor(ContextCompat.getColor(getContext(),R.color.colorAccent));
@@ -122,43 +133,36 @@ public class PieView extends View {
         mCenterFill.setAntiAlias(true);
         mCenterFill.setStyle(Paint.Style.FILL);
 
+        mSectionPaint = new Paint();
+        mSectionPaint.setAntiAlias(true);
+        mSectionPaint.setStyle(Paint.Style.FILL);
 
 
-        mRect = new RectF();
         mRectCent = new RectF();
         mTextBounds = new Rect();
         mBtnTextBounds = new Rect();
+        mSectionRect = new RectF();
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec,heightMeasureSpec);
-        /*int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-        Log.i("Main",widthSize+"");
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-        int width;
-        int height;
+    protected synchronized void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
-        if (widthMode == MeasureSpec.EXACTLY)
-        {
-            width = widthSize;
-            Log.i("Main","width:"+width+"");
-        } else
-        {
-            width= getWidth();
-        }
 
-        if (heightMode == MeasureSpec.EXACTLY)
-        {
-            height = heightSize;
-        } else
-        {
-            height = getWidth();
-        }*/
+        int width = MeasureSpec.getSize(widthMeasureSpec);
+        int height = MeasureSpec.getSize(heightMeasureSpec);
 
-        mTextPaint.setTextSize(mPercentageSize);
+        if (width > height)
+            super.onMeasure(heightMeasureSpec, widthMeasureSpec);
+        else
+            super.onMeasure(widthMeasureSpec, widthMeasureSpec);
+
+        setRectDimensions(getWidth(),getHeight());
+        setPaintDimensions();
+
+    }
+
+    private void setPaintDimensions() {
+        mTextPaint.setTextSize(this.getResources().getDimension(R.dimen.textSize));
         mTextWidth = (int)mTextPaint.measureText(mPercentageText);
 
         mTextPaint.getTextBounds(mPercentageText,0,mPercentageText.length(),mTextBounds);
@@ -166,103 +170,86 @@ public class PieView extends View {
         Log.i("Main","textHeight"+mTextHeight);
         mTextPaint.setTextAlign(Paint.Align.CENTER);
 
-        mBtnTextPaint.setTextSize(mPercentageSize);
+        mBtnTextPaint.setTextSize(this.getResources().getDimension(R.dimen.textSize));
         mBtnTextWidth = (int) mBtnTextPaint.measureText(mCenterBtnText);
         mBtnTextPaint.getTextBounds(mCenterBtnText,0,mCenterBtnText.length(),mBtnTextBounds);
         mBtnTextHeight = mBtnTextBounds.height();
         Log.i("Main","btntextheight"+mBtnTextHeight);
         mBtnTextPaint.setTextAlign(Paint.Align.CENTER);
-        //setMeasuredDimension(width, height);
-
-
-        setMeasuredDimension(measureWidth(widthMeasureSpec),
-                measureHeight(heightMeasureSpec));
-    }
-
-    private int measureHeight(int measureSpec) {
-        int result = 0;
-        int mode = MeasureSpec.getMode(measureSpec);
-        int size = MeasureSpec.getSize(measureSpec);
-Log.i("Main","Width====="+size);
-        if (mode == MeasureSpec.EXACTLY) {
-            result = size;
-        } else {
-            result = (int) getWidth();
-            if (mode == MeasureSpec.AT_MOST) {
-                result = Math.min(result, size);
-            }
-        }
-        return result;
 
     }
 
-    private int measureWidth(int measureSpec) {
-        int result = 0;
-        int mode = MeasureSpec.getMode(measureSpec);
-        int size = MeasureSpec.getSize(measureSpec);
+    private void setRectDimensions(int width, int height) {
+        mCenterX = width / 2.0f;
+        mCenterY = height / 2.0f;
 
-        if (mode == MeasureSpec.EXACTLY) {
-            result = size;
-        } else {
+        // Find shortest dimension
+        int diameter = Math.min(width, height);
 
-            WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-            DisplayMetrics dm = new DisplayMetrics();
-            wm.getDefaultDisplay().getMetrics(dm);
-            int screenWidthPx = dm.widthPixels;// 屏幕宽度（像素）
-            int screenHeightPx= dm.heightPixels; // 屏幕高度（像素）
-            float density = dm.density;//屏幕密度（0.75 / 1.0 / 1.5）
-            int densityDpi = dm.densityDpi;//屏幕密度dpi（120 / 160 / 240）
-            //屏幕宽度算法:屏幕宽度（像素）/屏幕密度
-            int screenWidth = (int) (screenWidthPx/density);//屏幕宽度(dp)
-            Log.i("123", screenWidth + "======" + screenHeightPx+"+++++++++++++"+density);
-            result = (int)(screenWidthPx-80*density*2);//根据自己的需要更改
-            Log.i("123",result+"");
-            if (mode == MeasureSpec.AT_MOST) {
-                result = Math.min(result, size);
-            }
-        }
-        return result;
+        float outerRadius = diameter / 2;
+        float sectionHeight = mInnerCirclePadding;
+        float sectionWidth = sectionHeight / mSectionRatio;
+
+        mRadius = outerRadius - sectionHeight / 2;
+        mSectionRect.set(-sectionWidth / 2, -sectionHeight / 2, sectionWidth / 2, sectionHeight / 2);
+        mRectCent.set(-mRadius,-mRadius,mRadius,mRadius);
+        //mSectionHeight = sectionHeight;
 
     }
+
+
+
     @Override
     protected void onDraw(Canvas canvas) {
+
+        canvas.translate(mCenterX, mCenterY);
+
+        float rotation = 360.0f / (float) 100;
+        for (int i = 0; i < 100; ++i) {
+            canvas.save();
+
+            canvas.rotate((float) i * rotation);
+            canvas.translate(0, -mRadius);
+
+            if (i < mCurrentPercentage*100) {
+                mSectionPaint.setColor(ContextCompat.getColor(getContext(),R.color.percentageFillColor));
+            } else {
+                canvas.scale(0.7f, 0.7f);
+                mSectionPaint.setColor(ContextCompat.getColor(getContext(),R.color.percentageBackColor));
+            }
+
+            canvas.drawRect(mSectionRect, mSectionPaint);
+            canvas.restore();
+
+
+        }
+
+        canvas.drawArc(mRectCent, 150, 240f, false, mCenterFill);
+        canvas.drawArc(mRectCent,30,120f,false,mCenterBtn);
+        canvas.drawText(mPercentageText,0f,-mRadius*1/3,mTextPaint);
+        canvas.drawText(mSecondText,0f,mTextHeight/2,mTextPaint);
+        canvas.drawText(mCenterBtnText,0f,mRadius*3/4+mBtnTextHeight*1/4,mBtnTextPaint);
         super.onDraw(canvas);
 
 
-       /* WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics dm = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(dm);
-        int screenWidthPx = dm.widthPixels;// 屏幕宽度（像素）
-        int screenHeightPx= dm.heightPixels; // 屏幕高度（像素）
-        float density = dm.density;//屏幕密度（0.75 / 1.0 / 1.5）
-        int densityDpi = dm.densityDpi;//屏幕密度dpi（120 / 160 / 240）
-        //屏幕宽度算法:屏幕宽度（像素）/屏幕密度
-        int screenWidth = (int) (screenWidthPx/density);//屏幕宽度(dp)
-        int screenHeight = (int)(screenHeightPx/density);//屏幕高度(dp)
-        Log.e("123", screenWidthPx + "======" + screenHeightPx+"+++++++++++++"+mInnerCirclePadding);
-        */
-
-        int left = 0;
-        int width = getMeasuredWidth();
-        Log.i("Main","onDraw:"+width);
-        int height = width;
-        int top = 0;
-
-        mRect.set(left, top, left + width, top + height);
-        mRectCent.set(left + mInnerCirclePadding, top + mInnerCirclePadding, (left - mInnerCirclePadding) + width,
-                (top - mInnerCirclePadding) + height);
-
-        canvas.drawArc(mRect, -90, 360, true, mBackgroundFill);
-
-        if (mPercentage != 0) {
-            canvas.drawArc(mRect, -90, (360 * mCurrentPercentage), true, mPercentageFill);
-            canvas.drawArc(mRectCent, 150, 240, false, mCenterFill);
-            canvas.drawArc(mRectCent,30,120,false,mCenterBtn);
-
-        }
-
-        canvas.drawText(mPercentageText,width/2,(height)*3/8+mTextHeight/2+mInnerCirclePadding,mTextPaint);//上部文字
-        canvas.drawText(mCenterBtnText,width/2,(height)*7/8+mBtnTextHeight/2-mInnerCirclePadding,mBtnTextPaint);//btn文字
+//        int left = 0;
+//        int width = getMeasuredWidth();
+//        Log.i("Main","onDraw:"+width);
+//        int height = width;
+//        int top = 0;
+//
+//        mRectCent.set(left + mInnerCirclePadding, top + mInnerCirclePadding, (left - mInnerCirclePadding) + width,
+//                (top - mInnerCirclePadding) + height);
+//
+//
+//
+//            canvas.drawArc(mRectCent, 150, 240f, false, mCenterFill);
+//            canvas.drawArc(mRectCent,30,120f,false,mCenterBtn);
+//
+//
+//
+//        canvas.drawText(mPercentageText,width/2,(height)*3/8+mTextHeight/2+mInnerCirclePadding,mTextPaint);//上部文字
+//        canvas.drawText(mCenterBtnText,width/2,(height)*7/8+mBtnTextHeight/2-mInnerCirclePadding,mBtnTextPaint);//btn文字
 //        baseLayout.draw(canvas);
     }
 
@@ -287,8 +274,13 @@ Log.i("Main","Width====="+size);
      */
     public void setmPercentage(@FloatRange(from = 0, to = 100) float mPercentage) {
         this.mPercentage = mPercentage / 100;
-        int roundedPercentage = (int) mPercentage;
-        this.mPercentageText=Integer.toString(roundedPercentage) + "%";
+        invalidate();
+    }
+
+    public void setmSecondText(int stepCount){
+        this.mSecondText = stepCount+getContext().getString(R.string.step);
+        this.mCurrentPercentage = (float)stepCount/5000;
+        this.mPercentage = stepCount/50;
         invalidate();
     }
 

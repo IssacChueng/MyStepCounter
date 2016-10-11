@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_avatar"
     android:layout_width="match_parent"
-    android:layout_height="45dp"
+    android:layout_height="46dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/titlebg">
 
@@ -24,7 +24,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_margin="5dp"
-        android:src="@mipmap/ic_share"/>
+        android:src="@mipmap/ic_share_user"/>
 
 
 
@@ -38,5 +38,11 @@
         android:layout_centerVertical="true"
         android:textSize="25sp"/>
 
-
+    <View
+        android:id="@+id/title_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#BBBBBB"
+        android:layout_alignParentBottom="true"
+        />
 </RelativeLayout>

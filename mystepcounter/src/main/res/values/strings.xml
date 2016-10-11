@@ -12,7 +12,7 @@
     <string name="fragment_group">Fragment Group</string>
     <string name="fragment_statistics">Fragment Statistics</string>
     <string name="fragment_user">Fragment User</string>
-    <string name="inner_text">the text </string>
+    <string name="inner_text">你已坚持了</string>
     <string name="btn_start">开始</string>
     <string name="btn_resume">继续</string>
     <string name="btn_pause">歇一下</string>
@@ -35,5 +35,7 @@
     <string name="item_info">已坚持xx公里</string>
     <string name="item_name">晒我回复</string>
     <string name="challenge">挑战</string>
+    <string name="step">步</string>
+    <string name="pre_step">你已走了</string>
 
 </resources>

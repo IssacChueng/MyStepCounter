@@ -13,7 +13,7 @@ public class MyHourFormatter implements AxisValueFormatter {
 
     @Override
     public String getFormattedValue(float value, AxisBase axis) {
-        int hour = (int)value*6;
+        int hour = (int)value;
         return String.valueOf(hour)+":00";
     }
 

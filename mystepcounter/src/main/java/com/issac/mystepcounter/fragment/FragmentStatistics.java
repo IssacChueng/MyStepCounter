@@ -181,6 +181,7 @@ public class FragmentStatistics extends Fragment implements View.OnClickListener
                 old.resetColor();
                 p=position;
 
+
             }
 
             @Override
@@ -206,7 +207,7 @@ public class FragmentStatistics extends Fragment implements View.OnClickListener
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
-        xAxis.setAxisLineColor(0x666666);
+        xAxis.setAxisLineColor(0x3F51B5);
         Log.i("Main","initing----------");
         mv = new MyMarkerView(getContext(),R.layout.markview);
         lineChart.setMarkerView(mv);
@@ -231,10 +232,10 @@ public class FragmentStatistics extends Fragment implements View.OnClickListener
 
     private void initMonthLineChart(LineChart lineChart) {
         XAxis xAxis = lineChart.getXAxis();
-
+        xAxis.setLabelCount(7,true);
         xAxis.setValueFormatter(new MyMonthFormatter());
         YAxis yAxis = lineChart.getAxisLeft();
-        yAxis.setAxisLineColor(0x666666);
+        yAxis.setAxisLineColor(0x3F51B5);
         yAxis.removeAllLimitLines();
         yAxis.setAxisMaxValue(200f);
         yAxis.setAxisMinValue(0f);
@@ -248,10 +249,10 @@ public class FragmentStatistics extends Fragment implements View.OnClickListener
 
     private void initWeekLineChart(LineChart lineChart) {
         XAxis xAxis = lineChart.getXAxis();
-
+        xAxis.setLabelCount(7,true);
         xAxis.setValueFormatter(new MyWeekFormatter());
         YAxis yAxis = lineChart.getAxisLeft();
-        yAxis.setAxisLineColor(0x666666);
+        yAxis.setAxisLineColor(0x3F51B5);
         yAxis.removeAllLimitLines();
         yAxis.setAxisMaxValue(200f);
         yAxis.setAxisMinValue(0f);
@@ -262,10 +263,10 @@ public class FragmentStatistics extends Fragment implements View.OnClickListener
 
     private void initDateLineChart(LineChart lineChart) {
         XAxis xAxis = lineChart.getXAxis();
-
+        xAxis.setLabelCount(7,true);
         xAxis.setValueFormatter(new MyDateFormatter());
         YAxis yAxis = lineChart.getAxisLeft();
-        yAxis.setAxisLineColor(0x666666);
+        yAxis.setAxisLineColor(0x3F51B5);
         yAxis.removeAllLimitLines();
         yAxis.setAxisMaxValue(200f);
         yAxis.setAxisMinValue(0f);
@@ -289,8 +290,8 @@ public class FragmentStatistics extends Fragment implements View.OnClickListener
         }else{
             // create a dataset and give it a type
             set1 = new LineDataSet(values, "DataSet 1");
-            set1.setColor(Color.argb(100,0xff,0x33,0x00));
-            set1.setCircleColor(Color.argb(255,0xff,0x33,0x00));
+            set1.setColor(Color.argb(100,0x14,0xB9,0xD6));
+            set1.setCircleColor(Color.argb(255,0x14,0xB9,0xD6));
             set1.setLineWidth(1f);
             set1.setCircleRadius(4f);
             set1.setDrawCircleHole(true);

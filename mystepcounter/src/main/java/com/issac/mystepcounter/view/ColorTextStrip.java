@@ -34,7 +34,7 @@ public class ColorTextStrip extends View {
     private int mTextSize = sp2px(getContext(),30f);
 
     private int mTextNormalColor = 0xff000000;
-    private int mTextChangeColor = 0xffff0000;
+    private int mTextChangeColor = 0x14B9D6;
 
     private Rect mTextBound = new Rect();
     private Rect lineBound = new Rect();

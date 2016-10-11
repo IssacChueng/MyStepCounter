@@ -1,10 +1,21 @@
 package com.issac.mystepcounter.fragment;
 
 
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -26,6 +37,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.Utils;
 import com.issac.mystepcounter.MainActivity;
 import com.issac.mystepcounter.R;
+import com.issac.mystepcounter.utils.Constant;
 import com.issac.mystepcounter.utils.MyHourFormatter;
 import com.issac.mystepcounter.view.MyMarkerView;
 import com.issac.mystepcounter.view.PieView;
@@ -37,7 +49,7 @@ import java.util.ArrayList;
  * Use the {@link FragmentHomePage#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentHomePage extends Fragment {
+public class FragmentHomePage extends Fragment{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -48,15 +60,32 @@ public class FragmentHomePage extends Fragment {
     private PieView mPieView;
     private LineChart mLineChartHome;
     private MarkerView mv;
+    private MainActivity activity;
+    private Handler mHandler =new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            mPieView.setmSecondText(msg.what);
+            return false;
+        }
+    });
+
     //-------------------------------
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        activity = (MainActivity) context;
+        activity.setHandler(mHandler);
+    }
+
     public FragmentHomePage() {
         // Required empty public constructor
     }
+
 
     /**
      * Use this factory method to create a new instance of
@@ -95,10 +124,10 @@ public class FragmentHomePage extends Fragment {
             mLineChartHome = (LineChart) mFragmentView.findViewById(R.id.lineChartHome);
             initChart();
 
-
         }
         return mFragmentView;
     }
+
 
     private void initChart() {
         mLineChartHome.setOnChartValueSelectedListener((MainActivity)getActivity());
@@ -124,10 +153,9 @@ public class FragmentHomePage extends Fragment {
 
         XAxis xAxis = mLineChartHome.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.enableGridDashedLine(10f,10f,0f);
+        xAxis.disableGridDashedLine();
         xAxis.setValueFormatter(new MyHourFormatter());
-
-
+        xAxis.setLabelCount(5,true);
 
 
 
@@ -150,16 +178,14 @@ public class FragmentHomePage extends Fragment {
 
         YAxis yAxis = mLineChartHome.getAxisLeft();
         yAxis.removeAllLimitLines();
-        yAxis.addLimitLine(ll1);
-        yAxis.addLimitLine(ll2);
-        yAxis.setAxisMaxValue(200f);
-        yAxis.setAxisMinValue(-40f);
+        yAxis.setAxisMaxValue(1000f);
+        yAxis.setAxisMinValue(0f);
         yAxis.enableGridDashedLine(10f,10f,0f);
         yAxis.setDrawZeroLine(true);
         yAxis.setDrawLimitLinesBehindData(true);
         mLineChartHome.getAxisRight().setEnabled(false);
 
-        setData(5,100);
+        setData(25,2000);
         //mLineChartHome.animateX(2500);
 
         Legend l = mLineChartHome.getLegend();
@@ -195,25 +221,13 @@ public class FragmentHomePage extends Fragment {
             // create a dataset and give it a type
             set1 = new LineDataSet(values, "DataSet 1");
 
-            // set the line to be drawn like this "- - - - - -"
-            set1.enableDashedLine(10f, 5f, 0f);
-            set1.enableDashedHighlightLine(10f, 5f, 0f);
-            set1.setColor(Color.BLACK);
-            set1.setCircleColor(Color.BLACK);
-            set1.setLineWidth(1f);
-            set1.setCircleRadius(3f);
-            set1.setDrawCircleHole(false);
-            set1.setValueTextSize(9f);
+            set1.disableDashedLine();
+            set1.setLineWidth(0f);
+            set1.setHighlightLineWidth(0f);
+            set1.setDrawCircles(false);
+            set1.setValueTextSize(0f);
             set1.setDrawFilled(true);
-
-            if (Utils.getSDKInt() >= 18) {
-                // fill drawable only supported on api level 18 and above
-                Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.fade_red);
-                set1.setFillDrawable(drawable);
-            }
-            else {
-                set1.setFillColor(Color.BLACK);
-            }
+            set1.setFillColor(Color.argb(255,0x66,0xCC,0xCC));
 
             ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
             dataSets.add(set1); // add the datasets
@@ -246,5 +260,10 @@ public class FragmentHomePage extends Fragment {
     public void drawMarkerView(Entry e, Highlight h){
 
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }
