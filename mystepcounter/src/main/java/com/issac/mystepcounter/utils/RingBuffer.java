@@ -12,7 +12,7 @@ public class RingBuffer<T> {
     /**
      * 循环队列 （数组）默认大小
      */
-    private final int DEFAULT_SIZE = 17;
+    private final int DEFAULT_SIZE = 11;
 
     /**
      * (循环队列)数组的容量
@@ -100,12 +100,12 @@ public class RingBuffer<T> {
 
     public boolean hasPeak(){
         if (isFull()){
-            float value = (Float) elementData[(head+8)%17];
+            float value = (Float) elementData[(head+5)%11];
             int i=0;
 
             if(value>10) {
-                while (i < 17) {
-                    if (value < (Float) elementData[(head + i) % 17]) {
+                while (i < 11) {
+                    if (value < (Float) elementData[(head + i) % 11]) {
                         return false;
                     }
                     i++;

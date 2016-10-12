@@ -296,25 +296,15 @@ public class PieView extends View {
         Log.i("Main","distanceHeight++++++++++"+distanceHeight+"\n"+r);
         String start = getContext().getString(R.string.btn_start);
         String pause = getContext().getString(R.string.btn_pause);
-        switch (event.getAction()){
-            case MotionEvent.ACTION_DOWN:
-
-
-                if (Math.pow((x-getWidth()/2),2)<Math.pow(r,2)*3/4){
-                    Log.i("Main","true");
-                    if (Math.pow(r,2)/4<=distanceHeight && distanceHeight <= r*r-Math.pow((x-getWidth()/2),2)){
+        if (Math.pow((x-getWidth()/2),2)<Math.pow(r,2)*3/4){
+            Log.i("Main","true");
+            if (Math.pow(r,2)/4<=distanceHeight && distanceHeight <= r*r-Math.pow((x-getWidth()/2),2)){
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
                         mCenterBtn.setColor(ContextCompat.getColor(getContext(),R.color.colorBtnDown));
                         invalidate();
-                        return true;
-                    }
-                }
-
-                break;
-            case MotionEvent.ACTION_UP:
-                Log.i("Main","XUP=================="+x);
-                Log.i("Main","YUP=================="+y);
-                if (Math.pow((x-getWidth()/2),2)<Math.pow(r,2)*3/4){
-                    if (Math.pow(r,2)/4<=distanceHeight && distanceHeight <= r*r-Math.pow((x-getWidth()/2),2)){
+                        break;
+                    case MotionEvent.ACTION_UP:
                         mCenterBtn.setColor(ContextCompat.getColor(getContext(),R.color.colorAccent));
                         if (mCenterBtnText.equals(start)){
                             mCenterBtnText = pause;
@@ -322,13 +312,13 @@ public class PieView extends View {
                             mCenterBtnText =start;
                         }
                         invalidate();
-                        return true;
-                    }
+                        break;
                 }
-                break;
+                return super.onTouchEvent(event);
+            }
 
         }
-        return super.onTouchEvent(event);
+        return true;
     }
 
     /**

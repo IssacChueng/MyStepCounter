@@ -10,4 +10,6 @@ public interface Constant {
     public static final int REQUEST_SERVER = 2;
     public static boolean hourOver=false;
     public static boolean dateOver=false;
+    public static final int MSG_PAUSE_STEP=3;
+    public static final int MSG_RESUME_STEP = 4;
 }

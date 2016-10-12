@@ -63,6 +63,10 @@ public class StepService extends Service implements SensorEventListener {
         stepCounter = new StepCounter(this);
         Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         sensorManager.registerListener(stepCounter,sensor,SensorManager.SENSOR_DELAY_UI);
+        Sensor gravitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+        sensorManager.registerListener(this,gravitySensor,SensorManager.SENSOR_DELAY_UI);
+
+
     }
 
     synchronized private PowerManager.WakeLock getLock(Context context) {
@@ -93,7 +97,13 @@ public class StepService extends Service implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-
+        if (event.sensor.getType() == Sensor.TYPE_GRAVITY) {
+            if (event.values[2] > 7) {
+                StepCounter.flag = false;
+            }else{
+                StepCounter.flag = true;
+            }
+        }
     }
 
     @Override
@@ -117,6 +127,12 @@ public class StepService extends Service implements SensorEventListener {
                     }catch (RemoteException e){
                         e.printStackTrace();
                     }
+                    break;
+                case Constant.MSG_PAUSE_STEP:
+                    StepCounter.pauseFlag=true;
+                    break;
+                case Constant.MSG_RESUME_STEP:
+                    StepCounter.pauseFlag=false;
                     break;
                 default:
                     super.handleMessage(msg);

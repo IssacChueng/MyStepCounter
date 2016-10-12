@@ -49,7 +49,7 @@ import java.util.ArrayList;
  * Use the {@link FragmentHomePage#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentHomePage extends Fragment{
+public class FragmentHomePage extends Fragment implements View.OnClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -61,6 +61,8 @@ public class FragmentHomePage extends Fragment{
     private LineChart mLineChartHome;
     private MarkerView mv;
     private MainActivity activity;
+    private Message msg ;
+    private boolean pauseFlag = false;
     private Handler mHandler =new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -80,6 +82,8 @@ public class FragmentHomePage extends Fragment{
         super.onAttach(context);
         activity = (MainActivity) context;
         activity.setHandler(mHandler);
+        msg = Message.obtain(new Handler(activity));
+
     }
 
     public FragmentHomePage() {
@@ -112,6 +116,8 @@ public class FragmentHomePage extends Fragment{
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
     @Override
@@ -121,6 +127,7 @@ public class FragmentHomePage extends Fragment{
         if (mFragmentView == null){
             mFragmentView = inflater.inflate(R.layout.fragment_home_page,container,false);
             mPieView = (PieView) mFragmentView.findViewById(R.id.stepCounts);
+            mPieView.setOnClickListener(this);
             mLineChartHome = (LineChart) mFragmentView.findViewById(R.id.lineChartHome);
             initChart();
 
@@ -128,6 +135,20 @@ public class FragmentHomePage extends Fragment{
         return mFragmentView;
     }
 
+    @Override
+    public void onClick(View v) {
+        if (pauseFlag){
+            msg = Message.obtain(new Handler((MainActivity)getActivity()));
+            msg.what = Constant.MSG_PAUSE_STEP;
+            msg.sendToTarget();
+            pauseFlag = false;
+        }else{
+            msg = Message.obtain(new Handler((MainActivity)getActivity()));
+            msg.what = Constant.MSG_RESUME_STEP;
+            msg.sendToTarget();
+            pauseFlag = true;
+        }
+    }
 
     private void initChart() {
         mLineChartHome.setOnChartValueSelectedListener((MainActivity)getActivity());

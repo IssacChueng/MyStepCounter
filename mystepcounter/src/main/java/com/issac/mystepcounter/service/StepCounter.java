@@ -21,9 +21,13 @@ public class StepCounter implements SensorEventListener {
     //当前步数
     public static int stepCountInHour=0;
     //过滤前6步，这集步数据不稳定
-    private static int tempStep=0;
+    public static int tempStep=0;
+    //
+    private static int stopStep = 17;
     //开始计步
     static boolean flag=false;
+    //pause
+    static boolean pauseFlag = true;
 
     Context context;
     public StepCounter(Context context){
@@ -33,18 +37,16 @@ public class StepCounter implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        float[] values = event.values;
-        for (float v: values) {
-            Log.i("main","v = "+v);
-        }
+            if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
+                float[] values = event.values;
 
-        //求平方和
-        float value = pow(values);
-        tempValues.add(value);
-        //测试
-        StepValues v = new StepValues();
-        v.setValue(value+"");
-        DbUtils.insert(v);
+                //求平方和
+                float value = pow(values);
+                tempValues.add(value);
+                //测试
+                StepValues v = new StepValues();
+                v.setValue(value + "");
+                DbUtils.insert(v);
         /*StepTemp stepTemp = new StepTemp();
         stepTemp.setSteps(value+"");
         Log.i("main","is liteOrm == null"+(DbUtils.liteOrm==null));
@@ -55,21 +57,20 @@ public class StepCounter implements SensorEventListener {
         intent.putExtra("stepCount",(int)value);
         context.sendBroadcast(intent);
         Log.i("Tag",value+"");*/
-        //检测波峰，如果检测到波峰且可以计步，stepCountInHour++;
-        Log.i("tag","tempStep="+tempStep);
-        Log.i("tag","size="+tempValues.size());
-        if (tempValues.hasPeak()){
-            if (!flag){
-                tempStep++;
-                if (tempStep>6){
-                    flag=true;
+                //检测波峰，如果检测到波峰且可以计步，stepCountInHour++;
+                if (tempValues.hasPeak() && !pauseFlag) {
+                    if (!flag) {
+                        tempStep++;
+                        if (tempStep >4) {
+                            flag = true;
+                        }
+                    } else {
+                        stepCountInHour++;
+                        Toast.makeText(context, stepCountInHour + "", Toast.LENGTH_SHORT).show();
+                        Log.i("Tag", stepCountInHour + "");
+                    }
                 }
-            }else {
-                stepCountInHour++;
-                Toast.makeText(context, stepCountInHour + "", Toast.LENGTH_SHORT).show();
-                Log.i("Tag", stepCountInHour + "");
             }
-        }
     }
 
 

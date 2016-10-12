@@ -348,6 +348,25 @@ public class MainActivity extends AppCompatActivity implements
                 }
 
                 break;
+            case Constant.MSG_PAUSE_STEP:
+                Log.i("main","msg send");
+                try {
+                    Message msg1 =Message.obtain(null,Constant.MSG_PAUSE_STEP);
+                    msg1.replyTo = mGetReplyMessenger;
+                    messenger.send(msg1);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case Constant.MSG_RESUME_STEP:
+                try {
+                    Message msg1 =Message.obtain(null,Constant.MSG_RESUME_STEP);
+                    msg1.replyTo = mGetReplyMessenger;
+                    messenger.send(msg1);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+                break;
         }
         return false;
     }
