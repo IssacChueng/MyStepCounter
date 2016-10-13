@@ -18,7 +18,7 @@
             app:progress="1"
             app:time_text="@string/speed_rank"
             app:text_normal_color="#99AA99"
-            app:text_change_color="@color/colorPrimary"
+            app:text_change_color="@color/tabStrip"
             app:time_text_size="18sp"/>
         <View
             android:layout_width="1px"
@@ -35,7 +35,7 @@
             app:progress="1"
             app:time_text="@string/distance_rank"
             app:text_normal_color="#99AA99"
-            app:text_change_color="@color/colorPrimary"
+            app:text_change_color="@color/tabStrip"
             app:time_text_size="18sp"/>
     </LinearLayout>
     <LinearLayout
@@ -47,14 +47,14 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/colorPrimary"/>
+            android:background="@color/tabStrip"/>
         <View
             android:id="@+id/line_rank_2"
             android:visibility="invisible"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/colorPrimary"/>
+            android:background="@color/tabStrip"/>
     </LinearLayout>
 
     <View
