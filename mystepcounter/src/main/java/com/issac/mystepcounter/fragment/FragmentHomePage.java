@@ -143,13 +143,14 @@ public class FragmentHomePage extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         Log.i("fragmentHome","onCreateView");
-            mFragmentView = inflater.inflate(R.layout.fragment_home_page,container,false);
+        if(mFragmentView == null) {
+            mFragmentView = inflater.inflate(R.layout.fragment_home_page, container, false);
             mPieView = (PieView) mFragmentView.findViewById(R.id.stepCounts);
             mPieView.setOnClickListener(this);
             mLineChartHome = (LineChart) mFragmentView.findViewById(R.id.lineChartHome);
             initChart();
             Calendar c = Calendar.getInstance();
-
+        }
 
 
 

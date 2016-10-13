@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements
         //getActionBar().setDisplayShowHomeEnabled(false);
         mViewPager = (NoScrollViewPager) findViewById(R.id.viewPager);
         mViewPager.setNoScroll(true);
+        mViewPager.setOffscreenPageLimit(4);
         img_share = (ImageView) findViewById(R.id.img_share);
         img_avatar = (CircleImageView) findViewById(R.id.img_avatar);
         textTitle = (TextView) findViewById(R.id.text_title);
