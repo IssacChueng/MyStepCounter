@@ -9,35 +9,11 @@ import com.litesuits.orm.db.enums.AssignType;
  * Created by Administrator on 2016/10/10.
  */
 @Table("step_day")
-public class StepDay {
-    @PrimaryKey(AssignType.AUTO_INCREMENT)
-    private int id;
-    @Column("date")
-    private String date;
-    @Column("step")
-    private String step;
+public class StepDay extends StepValues{
 
-    public int getId() {
-        return id;
+
+    public StepDay(long date, int step) {
+        super(date,step);
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getStep() {
-        return step;
-    }
-
-    public void setStep(String step) {
-        this.step = step;
-    }
 }

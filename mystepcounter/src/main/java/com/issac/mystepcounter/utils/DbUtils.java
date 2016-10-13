@@ -4,11 +4,15 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
-import com.issac.mystepcounter.pojo.StepHour;
+import com.issac.mystepcounter.pojo.StepDay;
+import com.issac.mystepcounter.pojo.StepValues;
 import com.litesuits.orm.LiteOrm;
 import com.litesuits.orm.db.assit.QueryBuilder;
+import com.litesuits.orm.db.assit.WhereBuilder;
 import com.litesuits.orm.db.model.ConflictAlgorithm;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,10 +29,10 @@ public class DbUtils {
             liteOrm = LiteOrm.newCascadeInstance(_activity, DB_NAME);
             liteOrm.setDebugged(true);
             for (int i=0;i<25;i++){
-                StepHour stepHour = new StepHour();
-                stepHour.setHour(i+"");
+                /*StepHour stepHour = new StepHour();
+                stepHour.setHour(i);
                 stepHour.setStep(500+"");
-                liteOrm.insert(stepHour);
+                liteOrm.insert(stepHour);*/
 
             }
         }
@@ -72,6 +76,7 @@ public class DbUtils {
      * @return
      */
     public static <T> List<T> getQueryAll(Class<T> cla) {
+
         return liteOrm.query(cla);
     }
 
@@ -136,6 +141,33 @@ public class DbUtils {
 
     public static void closeDb(){
         liteOrm.close();
+    }
+
+    public static <T> long count(Class<T> claxx){
+        return liteOrm.queryCount(claxx);
+    }
+
+    public static <T extends StepValues> int sumStep(Class<T> claxx, Long head, Long tail){
+        int result=0;
+        List<T> list = query(claxx,head,tail);
+
+        for (T t:list){
+            result += t.getStep();
+        }
+        return result;
+
+    }
+
+    public static <T extends StepValues> List<T> query(Class<T> claxx,Long head,Long tail){
+        List<T> result = new ArrayList<>();
+        WhereBuilder whereBuilder = WhereBuilder.create(claxx);
+        whereBuilder.where("time between ? and ?",new Long[]{head,tail});
+        QueryBuilder queryBuilder = QueryBuilder.create(claxx).where(whereBuilder).appendOrderAscBy("time");
+        Log.i("Main",queryBuilder.createStatement().sql);
+        result= liteOrm.query(QueryBuilder.create(claxx).where(whereBuilder).appendOrderAscBy("time"));
+
+        return result;
+
     }
 
 }

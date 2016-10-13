@@ -9,12 +9,22 @@ import com.litesuits.orm.db.enums.AssignType;
  * Created by Administrator on 2016/10/11.
  */
 
-@Table("step_values")
 public class StepValues {
     @PrimaryKey(AssignType.AUTO_INCREMENT)
     private int id;
-    @Column("value")
-    private String value;
+    @Column("time")
+    private long time;
+    @Column("step")
+    private int step;
+
+    public StepValues() {
+    }
+
+    public StepValues(long time, int step) {
+        this.time = time;
+        this.step = step;
+    }
+
     public int getId() {
         return id;
     }
@@ -23,11 +33,19 @@ public class StepValues {
         this.id = id;
     }
 
-    public String getValue() {
-        return value;
+    public long getTime() {
+        return time;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setTime(long time) {
+        this.time = time;
+    }
+
+    public int getStep() {
+        return step;
+    }
+
+    public void setStep(int step) {
+        this.step = step;
     }
 }

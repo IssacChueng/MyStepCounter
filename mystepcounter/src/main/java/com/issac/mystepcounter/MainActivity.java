@@ -31,6 +31,7 @@ import com.issac.mystepcounter.fragment.FragmentGroup;
 import com.issac.mystepcounter.fragment.FragmentHomePage;
 import com.issac.mystepcounter.fragment.FragmentStatistics;
 import com.issac.mystepcounter.fragment.FragmentUser;
+import com.issac.mystepcounter.pojo.StepHour;
 import com.issac.mystepcounter.service.StepService;
 import com.issac.mystepcounter.utils.Constant;
 import com.issac.mystepcounter.utils.DbUtils;
@@ -317,7 +318,7 @@ public class MainActivity extends AppCompatActivity implements
     protected void onStart() {
         super.onStart();
         setupService();
-
+        DbUtils.createDb(this,true,"steps");
     }
 
     private void setupService() {

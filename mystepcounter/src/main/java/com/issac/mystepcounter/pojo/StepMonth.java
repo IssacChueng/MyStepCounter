@@ -10,37 +10,8 @@ import com.litesuits.orm.db.enums.AssignType;
  */
 
 @Table("step_month")
-public class StepMonth {
-    @PrimaryKey(AssignType.AUTO_INCREMENT)
-    private int id;
-
-    @Column("month")
-    private String month;// like 2016-4
-
-    @Column("step")
-    private String step;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getMonth() {
-        return month;
-    }
-
-    public void setMonth(String month) {
-        this.month = month;
-    }
-
-    public String getStep() {
-        return step;
-    }
-
-    public void setStep(String step) {
-        this.step = step;
+public class StepMonth extends StepValues{
+    public StepMonth(long time, int step) {
+        super(time, step);
     }
 }

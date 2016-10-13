@@ -14,7 +14,11 @@ public class StepTemp {
     @PrimaryKey(AssignType.AUTO_INCREMENT)
     private int id;
     @Column("steps")
-    private String steps;
+    private int steps;
+
+    public StepTemp(int steps) {
+        this.steps = steps;
+    }
 
     public int getId() {
         return id;
@@ -24,11 +28,11 @@ public class StepTemp {
         this.id = id;
     }
 
-    public String getSteps() {
+    public int getSteps() {
         return steps;
     }
 
-    public void setSteps(String steps) {
+    public void setSteps(int steps) {
         this.steps = steps;
     }
 }

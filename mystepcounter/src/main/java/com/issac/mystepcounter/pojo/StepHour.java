@@ -10,38 +10,9 @@ import com.litesuits.orm.db.enums.AssignType;
  */
 
 @Table("step_hour")
-public class StepHour {
+public class StepHour extends StepValues{
 
-    @PrimaryKey(AssignType.AUTO_INCREMENT)
-    private int id;
-
-    @Column("hour")
-    private String hour;
-
-    @Column("step")
-    private String step;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getHour() {
-        return hour;
-    }
-
-    public void setHour(String hour) {
-        this.hour = hour;
-    }
-
-    public String getStep() {
-        return step;
-    }
-
-    public void setStep(String step) {
-        this.step = step;
+    public StepHour(long time,int step){
+        super(time,step);
     }
 }

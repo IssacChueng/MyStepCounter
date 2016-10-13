@@ -175,13 +175,17 @@ public class FragmentStatistics extends Fragment implements View.OnClickListener
             @Override
             public void onPageSelected(int position) {
                 Log.i(tag,"onPageSelected position:"+position);
+                reset();
                 ColorTextStrip now = titleContainer.get(position);
-                ColorTextStrip old = titleContainer.get(p);
                 now.drawColor(255);
-                old.resetColor();
-                p=position;
 
 
+            }
+
+            public void reset(){
+                for (int i=0;i<viewContainer.size();i++){
+                    titleContainer.get(i).resetColor();
+                }
             }
 
             @Override
@@ -276,10 +280,10 @@ public class FragmentStatistics extends Fragment implements View.OnClickListener
     }
 
     private void setData(LineChart mLineChart, int count, int initdata) {
-        ArrayList<Entry> values = new ArrayList<>();
-        for (int i=0;i<count;i++){
+        ArrayList<Entry> values = new ArrayList<>(10);
+        /*for (int i=0;i<count;i++){
             values.add(new Entry(i,10));
-        }
+        }*/
         Log.i("Main",values+"-------------------------------------------------------------------------------------");
         LineDataSet set1;
         if (mLineChart.getData() != null && mLineChart.getData().getDataSetCount() >0){

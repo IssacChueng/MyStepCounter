@@ -38,4 +38,6 @@ dependencies {
     compile 'com.android.support.test:runner:0.5'
     compile files('libs/AMap_Location_V3.00_20160922.jar')
     compile files('libs/lite-orm-1.9.2.jar')
+    compile 'io.reactivex:rxjava:1.2.1'
+    compile 'io.reactivex:rxandroid:1.2.1'
 }

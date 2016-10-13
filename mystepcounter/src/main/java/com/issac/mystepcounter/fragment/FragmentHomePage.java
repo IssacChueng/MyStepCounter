@@ -16,6 +16,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.support.test.internal.runner.junit3.AndroidSuiteBuilder;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -37,12 +38,28 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.Utils;
 import com.issac.mystepcounter.MainActivity;
 import com.issac.mystepcounter.R;
+import com.issac.mystepcounter.pojo.StepHour;
 import com.issac.mystepcounter.utils.Constant;
+import com.issac.mystepcounter.utils.DbUtils;
 import com.issac.mystepcounter.utils.MyHourFormatter;
 import com.issac.mystepcounter.view.MyMarkerView;
 import com.issac.mystepcounter.view.PieView;
 
+import org.hamcrest.Condition;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -112,6 +129,7 @@ public class FragmentHomePage extends Fragment implements View.OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i("fragmentHome","onCreate");
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -124,16 +142,21 @@ public class FragmentHomePage extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        if (mFragmentView == null){
+        Log.i("fragmentHome","onCreateView");
             mFragmentView = inflater.inflate(R.layout.fragment_home_page,container,false);
             mPieView = (PieView) mFragmentView.findViewById(R.id.stepCounts);
             mPieView.setOnClickListener(this);
             mLineChartHome = (LineChart) mFragmentView.findViewById(R.id.lineChartHome);
             initChart();
+            Calendar c = Calendar.getInstance();
 
-        }
+
+
+
         return mFragmentView;
     }
+
+
 
     @Override
     public void onClick(View v) {
@@ -181,21 +204,21 @@ public class FragmentHomePage extends Fragment implements View.OnClickListener{
 
 
 
-        Typeface tf = Typeface.DEFAULT_BOLD;
+        /*Typeface tf = Typeface.DEFAULT_BOLD;
         LimitLine ll1 = new LimitLine(150f,"Upper Limit");
         ll1.setLineWidth(4f);
         ll1.enableDashedLine(10f,10f,0f);
         ll1.setLineColor(Color.TRANSPARENT);
         ll1.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
         ll1.setTextSize(10f);
-        ll1.setTypeface(tf);
+        ll1.setTypeface(tf);*/
 
-        LimitLine ll2 = new LimitLine(-30f,"Lower Limit");
+        /*LimitLine ll2 = new LimitLine(-30f,"Lower Limit");
         ll2.setLineWidth(4f);
         ll2.enableDashedLine(10f,10f,0f);
         ll2.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
         ll2.setTextSize(10f);
-        ll2.setTypeface(tf);
+        ll2.setTypeface(tf);*/
 
         YAxis yAxis = mLineChartHome.getAxisLeft();
         yAxis.removeAllLimitLines();
@@ -205,8 +228,53 @@ public class FragmentHomePage extends Fragment implements View.OnClickListener{
         yAxis.setDrawZeroLine(true);
         yAxis.setDrawLimitLinesBehindData(true);
         mLineChartHome.getAxisRight().setEnabled(false);
+        //先将表格绘制出来，否则因为查询数据较慢出现“没有数据"提示
+        float[] datas = new float[25];
+        setData(datas);
+        Observable.just(1L)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.io())
+                .map(new Func1<Long, List<StepHour>>() {
+                    @Override
+                    public List<StepHour> call(Long aLong) {
+                        List<StepHour> stepHours = new ArrayList<StepHour>();
 
-        setData(25,2000);
+                        long head =0;
+                        long tail =24;
+                        Log.i("main",tail+"");
+                        stepHours = DbUtils.query(StepHour.class,head,tail);
+                        Log.i("main",stepHours.size()+"");
+                        return stepHours;
+                    }
+                })
+                .observeOn(Schedulers.computation())
+                .map(new Func1<List<StepHour>, float[]>() {
+                    @Override
+                    public float[] call(List<StepHour> stepHours) {
+                        float[] steps=null;
+                        if (stepHours!= null && stepHours.size()>0){
+                            //将0点置为0步
+                            steps = new float[25];
+                            StepHour step;
+                            Log.i("main","stephours.size ="+stepHours.size());
+                            for (int i=1;i<stepHours.size();i++){
+                                step = stepHours.get(i);
+                                steps[(int) step.getTime()] = step.getStep();
+                            }
+
+
+                        }
+                        return steps;
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<float[]>() {
+                    @Override
+                    public void call(float[] ints) {
+                        if(ints!=null)
+                            setData(ints);
+                    }
+                });
         //mLineChartHome.animateX(2500);
 
         Legend l = mLineChartHome.getLegend();
@@ -221,26 +289,29 @@ public class FragmentHomePage extends Fragment implements View.OnClickListener{
 
     }
 
-    private void setData(int count, float range) {
-        ArrayList<Entry> values = new ArrayList<Entry>();
 
-        for (int i = 0; i < count; i++) {
 
-            float val = (float) (Math.random() * range) + 3;
+    private void setData(float[] datas) {
+        List<Entry> values = new ArrayList<>();
+        for (int i = 0; i < datas.length; i++) {
+
+            float val = datas[i];
+            Log.i("main","val="+val);
             values.add(new Entry(i, val));
         }
 
-        LineDataSet set1;
 
+        LineDataSet set1;
         if (mLineChartHome.getData() != null &&
                 mLineChartHome.getData().getDataSetCount() > 0) {
-            set1 = (LineDataSet)mLineChartHome.getData().getDataSetByIndex(0);
+            set1 = (LineDataSet) mLineChartHome.getData().getDataSetByIndex(0);
             set1.setValues(values);
-            mLineChartHome.getData().notifyDataChanged();
-            mLineChartHome.notifyDataSetChanged();
-        } else {
+            /*mLineChartHome.getData().notifyDataChanged();
+            mLineChartHome.notifyDataSetChanged();*/
+            mLineChartHome.moveViewToX(values.size() - 24);
+        }else {
             // create a dataset and give it a type
-            set1 = new LineDataSet(values, "DataSet 1");
+            set1 = new LineDataSet(values,null);
 
             set1.disableDashedLine();
             set1.setLineWidth(0f);
@@ -248,7 +319,7 @@ public class FragmentHomePage extends Fragment implements View.OnClickListener{
             set1.setDrawCircles(false);
             set1.setValueTextSize(0f);
             set1.setDrawFilled(true);
-            set1.setFillColor(Color.argb(255,0x66,0xCC,0xCC));
+            set1.setFillColor(Color.argb(255, 0x66, 0xCC, 0xCC));
 
             ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
             dataSets.add(set1); // add the datasets
@@ -258,6 +329,9 @@ public class FragmentHomePage extends Fragment implements View.OnClickListener{
 
             // set data
             mLineChartHome.setData(data);
+            /*mLineChartHome.getData().notifyDataChanged();
+            mLineChartHome.notifyDataSetChanged();*/
+            mLineChartHome.moveViewToX(data.getEntryCount() - 24);
         }
 
     }
@@ -265,7 +339,53 @@ public class FragmentHomePage extends Fragment implements View.OnClickListener{
 
     @Override
     public void onResume() {
+        Log.i("fragmentHome","onResume");
         mPieView.startCircleAnimation();
+        Log.i("main","onresume");
+        Observable.interval(5,TimeUnit.SECONDS)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.io())
+                .map(new Func1<Long, List<StepHour>>() {
+                    @Override
+                    public List<StepHour> call(Long aLong) {
+                        List<StepHour> stepHours = new ArrayList<StepHour>();
+
+                        long head =0;
+                        long tail =24;
+                        Log.i("main",tail+"");
+                        stepHours = DbUtils.query(StepHour.class,head,tail);
+                        Log.i("main",stepHours.size()+"");
+                        return stepHours;
+                    }
+                })
+                .observeOn(Schedulers.computation())
+                .map(new Func1<List<StepHour>, float[]>() {
+                    @Override
+                    public float[] call(List<StepHour> stepHours) {
+                        float[] steps=null;
+                        if (stepHours!= null && stepHours.size()>0){
+                            //将0点置为0步
+                            steps = new float[25];
+                            StepHour step;
+                            Log.i("main","stephours.size ="+stepHours.size());
+                            for (int i=1;i<stepHours.size();i++){
+                                step = stepHours.get(i);
+                                steps[(int) step.getTime()] = step.getStep();
+                            }
+
+
+                        }
+                        return steps;
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<float[]>() {
+                    @Override
+                    public void call(float[] ints) {
+                        if(ints!=null)
+                        setData(ints);
+                    }
+                });
         super.onResume();
     }
 
@@ -273,9 +393,6 @@ public class FragmentHomePage extends Fragment implements View.OnClickListener{
     public void onDestroyView() {
         Log.i("Main","-->onDestroyView");
         super.onDestroyView();
-        if (null != mFragmentView){
-            ((ViewGroup)mFragmentView.getParent()).removeView(mFragmentView);
-        }
     }
 
     public void drawMarkerView(Entry e, Highlight h){
@@ -285,6 +402,7 @@ public class FragmentHomePage extends Fragment implements View.OnClickListener{
 
     @Override
     public void onDestroy() {
+        Log.i("fragmentHome","onDestroy");
         super.onDestroy();
     }
 }

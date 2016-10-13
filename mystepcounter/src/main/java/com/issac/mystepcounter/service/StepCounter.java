@@ -18,8 +18,10 @@ import com.issac.mystepcounter.utils.RingBuffer;
 public class StepCounter implements SensorEventListener {
     //波峰检测窗口
     static RingBuffer<Float> tempValues = new RingBuffer<>();
-    //当前步数
+    //当前小时内步数
     public static int stepCountInHour=0;
+    //当前步数
+    public static int currentStep = 0;
     //过滤前6步，这集步数据不稳定
     public static int tempStep=0;
     //
@@ -43,10 +45,6 @@ public class StepCounter implements SensorEventListener {
                 //求平方和
                 float value = pow(values);
                 tempValues.add(value);
-                //测试
-                StepValues v = new StepValues();
-                v.setValue(value + "");
-                DbUtils.insert(v);
         /*StepTemp stepTemp = new StepTemp();
         stepTemp.setSteps(value+"");
         Log.i("main","is liteOrm == null"+(DbUtils.liteOrm==null));
@@ -57,7 +55,7 @@ public class StepCounter implements SensorEventListener {
         intent.putExtra("stepCount",(int)value);
         context.sendBroadcast(intent);
         Log.i("Tag",value+"");*/
-                //检测波峰，如果检测到波峰且可以计步，stepCountInHour++;
+                //检测波峰，如果检测到波峰且可以计步，currentStep++;
                 if (tempValues.hasPeak() && !pauseFlag) {
                     if (!flag) {
                         tempStep++;
@@ -65,9 +63,10 @@ public class StepCounter implements SensorEventListener {
                             flag = true;
                         }
                     } else {
+                        currentStep++;
                         stepCountInHour++;
-                        Toast.makeText(context, stepCountInHour + "", Toast.LENGTH_SHORT).show();
-                        Log.i("Tag", stepCountInHour + "");
+                        Toast.makeText(context, currentStep + "", Toast.LENGTH_SHORT).show();
+                        Log.i("Tag", currentStep + "");
                     }
                 }
             }
@@ -88,4 +87,6 @@ public class StepCounter implements SensorEventListener {
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
+
 }
