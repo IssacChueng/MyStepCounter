@@ -7,6 +7,7 @@
     <attr name="text_normal_color" format="color|reference"/>
     <attr name="text_change_color" format="color|reference"/>
     <attr name="progress" format="float"/>
+    <attr name="m_text" format="string"/>
     <attr name="direction">
         <enum name="left" value="0"/>
         <enum name="right" value="1"/>
@@ -22,6 +23,7 @@
     <declare-styleable name="ChangeColorIconView">
         <attr name="micon"/>
         <attr name="mcolor"/>
+        <attr name="m_text"/>
     </declare-styleable>
     <declare-styleable name="CircleImageView">
         <attr name="border_width" format="dimension" />

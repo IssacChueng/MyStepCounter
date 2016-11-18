@@ -16,7 +16,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="60dp"
         android:background="@drawable/tabbg"
         android:orientation="horizontal">
         <com.issac.mystepcounter.view.ChangeColorWithIconView
@@ -25,21 +25,25 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="5dp"
-            app:micon="@mipmap/ic_home"/>
+            app:micon="@mipmap/ic_home"
+            app:m_text="主页"
+            />
         <com.issac.mystepcounter.view.ChangeColorWithIconView
             android:id="@+id/group"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="5dp"
-            app:micon="@mipmap/ic_ranking"/>
+            app:micon="@mipmap/ic_ranking"
+            app:m_text="排行"/>
         <com.issac.mystepcounter.view.ChangeColorWithIconView
             android:id="@+id/statistics"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="5dp"
-            app:micon="@mipmap/ic_statistics"/>
+            app:micon="@mipmap/ic_statistics"
+            app:m_text="统计"/>
         <com.issac.mystepcounter.view.ChangeColorWithIconView
             android:id="@+id/user"
             android:layout_width="0dp"
@@ -47,6 +51,7 @@
             android:layout_weight="1"
             android:padding="5dp"
             app:micon="@mipmap/ic_user"
+            app:m_text="我"
             />
     </LinearLayout>
 </LinearLayout>

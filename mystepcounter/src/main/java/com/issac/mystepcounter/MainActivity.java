@@ -35,10 +35,14 @@ import com.issac.mystepcounter.pojo.StepHour;
 import com.issac.mystepcounter.service.StepService;
 import com.issac.mystepcounter.utils.Constant;
 import com.issac.mystepcounter.utils.DbUtils;
+import com.issac.mystepcounter.utils.HttpUtil;
+import com.issac.mystepcounter.utils.PreferenceHelper;
 import com.issac.mystepcounter.view.ChangeColorWithIconView;
 import com.issac.mystepcounter.view.CircleImageView;
 import com.issac.mystepcounter.view.NoScrollViewPager;
 import com.issac.mystepcounter.view.PieView;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.PersistentCookieStore;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -99,9 +103,17 @@ public class MainActivity extends AppCompatActivity implements
         img_avatar = (CircleImageView) findViewById(R.id.img_avatar);
         textTitle = (TextView) findViewById(R.id.text_title);
         title_line = findViewById(R.id.title_line);
+        initHttp();
         initDatas();
         mViewPager.setAdapter(mAdapter);
         mViewPager.addOnPageChangeListener(this);
+    }
+
+    private void initHttp() {
+        AsyncHttpClient client = new AsyncHttpClient();
+        PersistentCookieStore myCookieStore = new PersistentCookieStore(this);
+        client.setCookieStore(myCookieStore);
+        HttpUtil.setClient(client);
     }
 
 
@@ -214,8 +226,6 @@ public class MainActivity extends AppCompatActivity implements
                 img_avatar.setAlpha(1-positionOffset);
             }
 
-
-
         }
 
 
@@ -320,6 +330,16 @@ public class MainActivity extends AppCompatActivity implements
         super.onStart();
         setupService();
         DbUtils.createDb(this,true,"steps");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        int firstCode = PreferenceHelper.readInt(this,"firstStart");
+        if (firstCode == -1){
+            PreferenceHelper.putInt(this,"firstStart",1);
+            //// TODO: 2016/11/11 第一次运行时做的工作
+        }
     }
 
     private void setupService() {

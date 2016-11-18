@@ -5,14 +5,17 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.Parcelable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -31,6 +34,9 @@ public class ChangeColorWithIconView extends View {
      * 颜色
      */
     private int mColor = 0x14B9D6;
+    private int mTextColor;
+    private int normalColor;
+    private int changeColor;
     /**
      * 透明度 0.0-1.0
      */
@@ -39,10 +45,16 @@ public class ChangeColorWithIconView extends View {
      * 图标
      */
     private Bitmap mIconBitmap;
+    private String mText;
     /**
      * 限制绘制icon的范围
      */
     private Rect mIconRect;
+    private int left;
+    private int top;
+    private Paint mTextPaint;
+    private int mTextHeight;
+    private int baseY;
 
     public ChangeColorWithIconView(Context context) {
         super(context);
@@ -55,6 +67,9 @@ public class ChangeColorWithIconView extends View {
                 R.styleable.ChangeColorIconView);
 
         int n = a.getIndexCount();
+        normalColor = ContextCompat.getColor(context, R.color.avatarBorder);
+        changeColor = ContextCompat.getColor(context,R.color.tabStrip);
+        mTextColor = normalColor;
         for (int i = 0; i < n; i++)
         {
 
@@ -68,8 +83,9 @@ public class ChangeColorWithIconView extends View {
                 case R.styleable.ChangeColorIconView_mcolor:
                     mColor = a.getColor(attr, 0x14B9D6);
                     break;
-
-
+                case R.styleable.ChangeColorIconView_m_text:
+                    mText = a.getString(attr);
+                    break;
             }
         }
 
@@ -82,15 +98,21 @@ public class ChangeColorWithIconView extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
+        mTextPaint = new Paint();
+        mTextPaint.setTextSize(40);
+        mTextPaint.setTextAlign(Paint.Align.CENTER);
+        //mTextPaint.setColor(mTextColor);
+        mTextPaint.setTypeface(Typeface.SERIF);
+        Paint.FontMetricsInt fontMetrics = mTextPaint.getFontMetricsInt();
+        mTextHeight = fontMetrics.bottom-fontMetrics.top;
+        Log.i("tag","mTextHeight="+mTextHeight+";MeasuredWidth="+getMeasuredWidth());
         // 得到绘制icon的宽
         int bitmapWidth = Math.min(getMeasuredWidth() - getPaddingLeft()
                 - getPaddingRight(), getMeasuredHeight() - getPaddingTop()
-                - getPaddingBottom() );
+                - getPaddingBottom()-mTextHeight );
 
-        int left = getMeasuredWidth() / 2 - bitmapWidth / 2;
-        int top = (getMeasuredHeight() ) / 2 - bitmapWidth
-                / 2;
+        left = getMeasuredWidth() / 2 - bitmapWidth / 2;
+        top = getPaddingTop();
         // 设置icon的绘制范围
         mIconRect = new Rect(left, top, left + bitmapWidth, top + bitmapWidth);
 
@@ -103,14 +125,16 @@ public class ChangeColorWithIconView extends View {
         int alpha = (int) Math.ceil((255 * mAlpha));
         canvas.drawBitmap(mIconBitmap, null, mIconRect, null);
         setupTargetBitmap(alpha);
-
         canvas.drawBitmap(mBitmap, 0, 0, null);
 
+        baseY = top+mIconRect.height()+mTextHeight;
+        mTextPaint.setColor(mTextColor);
+        canvas.drawText(mText,getMeasuredWidth()/2,baseY,mTextPaint);
     }
 
     private void setupTargetBitmap(int alpha)
     {
-        mBitmap = Bitmap.createBitmap(getMeasuredWidth(), getMeasuredHeight(),
+        mBitmap = Bitmap.createBitmap(getMeasuredWidth(), mIconRect.height(),
                 Bitmap.Config.ARGB_8888);
         mCanvas = new Canvas(mBitmap);
         mPaint = new Paint();
@@ -136,6 +160,11 @@ public class ChangeColorWithIconView extends View {
     public void setIconAlpha(float alpha)
     {
         this.mAlpha = alpha;
+        if(alpha==1){
+            this.mTextColor = changeColor;
+        }else{
+            this.mTextColor = normalColor;
+        }
         invalidateView();
     }
 
