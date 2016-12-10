@@ -4,16 +4,22 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
+import com.issac.mystepcounter.AppContext;
 import com.issac.mystepcounter.pojo.StepDay;
+import com.issac.mystepcounter.pojo.StepHour;
 import com.issac.mystepcounter.pojo.StepValues;
 import com.litesuits.orm.LiteOrm;
 import com.litesuits.orm.db.assit.QueryBuilder;
 import com.litesuits.orm.db.assit.WhereBuilder;
+import com.litesuits.orm.db.model.ColumnsValue;
 import com.litesuits.orm.db.model.ConflictAlgorithm;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by xf on 2016/1/31.
@@ -57,6 +63,10 @@ public class DbUtils {
      * @param t
      */
     public static <T> void insert(T t) {
+        Log.i(AppContext.Tag,QueryBuilder.create(t.getClass()).whereEquals(StepHour.STEP,0)
+                .whereAppendAnd()
+                .whereEquals(StepHour.TIME,1)
+                .createStatement().sql+"");
         liteOrm.save(t);
     }
 
@@ -130,8 +140,14 @@ public class DbUtils {
      *
      * @param t
      */
-    public static <T> void update(T t) {
-        liteOrm.update(t, ConflictAlgorithm.Replace);
+    public static <T extends StepValues> void update(T t) {
+        //liteOrm.update(t, ConflictAlgorithm.Replace);
+        WhereBuilder builder = WhereBuilder.create(t.getClass());
+        builder.where("time = ?",t.getTime());
+        Map<String, Object > kv = new HashMap<>();
+        kv.put("step",t.getStep());
+        ColumnsValue value = new ColumnsValue(kv);
+        liteOrm.update(builder,value,null);
     }
 
 
@@ -154,19 +170,35 @@ public class DbUtils {
         for (T t:list){
             result += t.getStep();
         }
+
         return result;
 
     }
 
+    public static <T extends StepValues> void insertOrUpdate(T t){
+        long count = liteOrm.queryCount(QueryBuilder.create(t.getClass())
+                .whereEquals(T.TIME,t.getTime())
+                .whereAppendAnd()
+                .whereEquals(T.STEP,t.getStep())
+                .appendOrderAscBy(T.TIME)
+        );
+        if (count >=0){
+            Map<String, Object> kv = new HashMap<>();
+            kv.put(T.STEP,t.getStep());
+            liteOrm.update(WhereBuilder.create(t.getClass()).equals(T.TIME,t.getTime()),
+                    new ColumnsValue(kv),null);
+        }else{
+            liteOrm.insert(t);
+        }
+    }
+
+
     public static <T extends StepValues> List<T> query(Class<T> claxx,Long head,Long tail){
-        List<T> result = new ArrayList<>();
         WhereBuilder whereBuilder = WhereBuilder.create(claxx);
         whereBuilder.where("time between ? and ?",new Long[]{head,tail});
-        QueryBuilder queryBuilder = QueryBuilder.create(claxx).where(whereBuilder).appendOrderAscBy("time");
+        QueryBuilder queryBuilder = QueryBuilder.create(claxx).where(whereBuilder).appendOrderAscBy(StepValues.TIME);
         Log.i("Main",queryBuilder.createStatement().sql);
-        result= liteOrm.query(QueryBuilder.create(claxx).where(whereBuilder).appendOrderAscBy("time"));
-
-        return result;
+        return liteOrm.query(queryBuilder);
 
     }
 

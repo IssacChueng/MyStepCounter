@@ -27,8 +27,10 @@ import com.issac.mystepcounter.pojo.StepWeek;
 import com.issac.mystepcounter.utils.Constant;
 import com.issac.mystepcounter.utils.DbUtils;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 
 public class StepService extends Service implements SensorEventListener {
@@ -49,8 +51,8 @@ public class StepService extends Service implements SensorEventListener {
     @Override
     public void onCreate() {
         super.onCreate();
+        initDatabase();
         initBroadcastReceiver();
-        DbUtils.createDb(this,true,"steps");
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -59,6 +61,19 @@ public class StepService extends Service implements SensorEventListener {
         }).start();
         //广播
 
+    }
+
+    private void initDatabase() {
+        DbUtils.createDb(this,true,"steps");
+        StepHour stepHour;
+
+        List<StepHour> list = DbUtils.query(StepHour.class,0L,0L);
+        if (list ==null || list.size() ==0) {
+            for (int i = 0; i < 25; i++) {
+                stepHour = new StepHour(i, 0);
+                DbUtils.insert(stepHour);
+            }
+        }
     }
 
     private void initBroadcastReceiver() {
@@ -100,6 +115,7 @@ public class StepService extends Service implements SensorEventListener {
                     //StepDay stepDay = new StepDay(now,StepCounter.currentStep);
                     DbUtils.deleteAll(StepHour.class);
                     DbUtils.insert(new StepDay(now,step));
+
                     //若是周日，保存一次
 
                     if (Calendar.SUNDAY == day){
@@ -119,12 +135,12 @@ public class StepService extends Service implements SensorEventListener {
                         calendar.setTime(new Date());
                     }
                 }else if (Intent.ACTION_TIME_TICK.equals(action)){
-                    //每分钟检查是否整点，是则保存
+                    //每分钟保存，检查是否整点，是则清零
                     Calendar calendar = Calendar.getInstance();
                     int min = calendar.get(Calendar.MINUTE);
+                        StepHour stepHour = new StepHour(calendar.get(Calendar.HOUR_OF_DAY),StepCounter.stepCountInHour);
+                        DbUtils.update(stepHour);
                     if (min == 0){
-                        StepHour stepHour = new StepHour(calendar.get(Calendar.HOUR_OF_DAY)-1,StepCounter.stepCountInHour);
-                        DbUtils.insert(stepHour);
                         StepCounter.stepCountInHour = 0;
                     }
 
@@ -217,7 +233,7 @@ public class StepService extends Service implements SensorEventListener {
                         Messenger messenger = msg.replyTo;
                         Message replyMsg = Message.obtain(null,Constant.MSG_FROM_SERVER);
                         Bundle arg = new Bundle();
-                        arg.putInt("step",StepCounter.stepCountInHour);
+                        arg.putInt("step",StepCounter.currentStep);
                         replyMsg.setData(arg);
                         messenger.send(replyMsg);
                     }catch (RemoteException e){

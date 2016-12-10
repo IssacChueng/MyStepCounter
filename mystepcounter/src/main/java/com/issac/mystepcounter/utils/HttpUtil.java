@@ -6,6 +6,7 @@ package com.issac.mystepcounter.utils;
 import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import java.util.Locale;
@@ -35,7 +36,7 @@ public class HttpUtil {
         client.setUserAgent("Android");
     }
 
-    public static void get(String partUrl, TextHttpResponseHandler handler) {
+    public static void get(String partUrl, AsyncHttpResponseHandler handler) {
         client.get(getAbsoluteApiUrl(partUrl), handler);
     }
 

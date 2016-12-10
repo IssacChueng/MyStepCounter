@@ -1,24 +1,12 @@
 package com.issac.mystepcounter.fragment;
 
 
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
-import android.support.test.internal.runner.junit3.AndroidSuiteBuilder;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +14,6 @@ import android.view.ViewGroup;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -35,7 +22,6 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.utils.Utils;
 import com.issac.mystepcounter.MainActivity;
 import com.issac.mystepcounter.R;
 import com.issac.mystepcounter.pojo.StepHour;
@@ -45,13 +31,8 @@ import com.issac.mystepcounter.utils.MyHourFormatter;
 import com.issac.mystepcounter.view.MyMarkerView;
 import com.issac.mystepcounter.view.PieView;
 
-import org.hamcrest.Condition;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -238,13 +219,13 @@ public class FragmentHomePage extends Fragment implements View.OnClickListener{
                 .map(new Func1<Long, List<StepHour>>() {
                     @Override
                     public List<StepHour> call(Long aLong) {
-                        List<StepHour> stepHours = new ArrayList<StepHour>();
-
+                        List<StepHour> stepHours;
                         long head =0;
                         long tail =24;
                         Log.i("main",tail+"");
                         stepHours = DbUtils.query(StepHour.class,head,tail);
                         Log.i("main",stepHours.size()+"");
+                        //MainActivity.steps++;
                         return stepHours;
                     }
                 })
@@ -297,7 +278,7 @@ public class FragmentHomePage extends Fragment implements View.OnClickListener{
         for (int i = 0; i < datas.length; i++) {
 
             float val = datas[i];
-            Log.i("main","val="+val);
+            //Log.i("main","val="+val);
             values.add(new Entry(i, val));
         }
 
@@ -307,8 +288,8 @@ public class FragmentHomePage extends Fragment implements View.OnClickListener{
                 mLineChartHome.getData().getDataSetCount() > 0) {
             set1 = (LineDataSet) mLineChartHome.getData().getDataSetByIndex(0);
             set1.setValues(values);
-            /*mLineChartHome.getData().notifyDataChanged();
-            mLineChartHome.notifyDataSetChanged();*/
+            mLineChartHome.getData().notifyDataChanged();
+            mLineChartHome.notifyDataSetChanged();
             mLineChartHome.moveViewToX(values.size() - 24);
         }else {
             // create a dataset and give it a type
@@ -343,7 +324,7 @@ public class FragmentHomePage extends Fragment implements View.OnClickListener{
         Log.i("fragmentHome","onResume");
         mPieView.startCircleAnimation();
         Log.i("main","onresume");
-        Observable.interval(5,TimeUnit.SECONDS)
+        Observable.interval(1,TimeUnit.MINUTES)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(Schedulers.io())
                 .map(new Func1<Long, List<StepHour>>() {

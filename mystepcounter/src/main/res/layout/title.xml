@@ -17,32 +17,10 @@
         app:border_color="@color/avatarBorder"
         app:border_width="1dp"/>
 
-    <ImageView
-        android:id="@+id/img_share"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="5dp"
-        android:src="@mipmap/ic_share_user"/>
 
 
 
-    <TextView
-        android:id="@+id/text_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:foregroundGravity="center_horizontal"
-        android:text="@string/title_home"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:textSize="25sp"/>
 
-    <View
-        android:id="@+id/title_line"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#BBBBBB"
-        android:layout_alignParentBottom="true"
-        />
+
+
 </RelativeLayout>

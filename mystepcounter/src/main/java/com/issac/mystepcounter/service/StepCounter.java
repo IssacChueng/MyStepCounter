@@ -65,8 +65,8 @@ public class StepCounter implements SensorEventListener {
                     } else {
                         currentStep++;
                         stepCountInHour++;
-                        Toast.makeText(context, currentStep + "", Toast.LENGTH_SHORT).show();
-                        Log.i("Tag", currentStep + "");
+                        //Toast.makeText(context, currentStep + "", Toast.LENGTH_SHORT).show();
+                        //Log.i("Tag", currentStep + "");
                     }
                 }
             }

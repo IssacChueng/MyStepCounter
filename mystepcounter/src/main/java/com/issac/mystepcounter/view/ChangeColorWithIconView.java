@@ -67,7 +67,7 @@ public class ChangeColorWithIconView extends View {
                 R.styleable.ChangeColorIconView);
 
         int n = a.getIndexCount();
-        normalColor = ContextCompat.getColor(context, R.color.avatarBorder);
+        normalColor = ContextCompat.getColor(context, R.color.font_content);
         changeColor = ContextCompat.getColor(context,R.color.tabStrip);
         mTextColor = normalColor;
         for (int i = 0; i < n; i++)
@@ -102,10 +102,10 @@ public class ChangeColorWithIconView extends View {
         mTextPaint.setTextSize(40);
         mTextPaint.setTextAlign(Paint.Align.CENTER);
         //mTextPaint.setColor(mTextColor);
-        mTextPaint.setTypeface(Typeface.SERIF);
+        mTextPaint.setTypeface(Typeface.MONOSPACE);
         Paint.FontMetricsInt fontMetrics = mTextPaint.getFontMetricsInt();
         mTextHeight = fontMetrics.bottom-fontMetrics.top;
-        Log.i("tag","mTextHeight="+mTextHeight+";MeasuredWidth="+getMeasuredWidth());
+        //Log.i("tag","mTextHeight="+mTextHeight+";MeasuredWidth="+getMeasuredWidth());
         // 得到绘制icon的宽
         int bitmapWidth = Math.min(getMeasuredWidth() - getPaddingLeft()
                 - getPaddingRight(), getMeasuredHeight() - getPaddingTop()
@@ -123,22 +123,23 @@ public class ChangeColorWithIconView extends View {
     {
 
         int alpha = (int) Math.ceil((255 * mAlpha));
+        baseY = top+mIconRect.height()+mTextHeight;
         canvas.drawBitmap(mIconBitmap, null, mIconRect, null);
         setupTargetBitmap(alpha);
         canvas.drawBitmap(mBitmap, 0, 0, null);
 
-        baseY = top+mIconRect.height()+mTextHeight;
+
         mTextPaint.setColor(mTextColor);
         canvas.drawText(mText,getMeasuredWidth()/2,baseY,mTextPaint);
     }
 
     private void setupTargetBitmap(int alpha)
     {
-        mBitmap = Bitmap.createBitmap(getMeasuredWidth(), mIconRect.height(),
+        mBitmap = Bitmap.createBitmap(getMeasuredWidth(), mIconRect.bottom,
                 Bitmap.Config.ARGB_8888);
         mCanvas = new Canvas(mBitmap);
         mPaint = new Paint();
-        mPaint.setColor(0x14B9D6);
+        mPaint.setColor(mColor);
         Log.i("Main",mColor+"");
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);

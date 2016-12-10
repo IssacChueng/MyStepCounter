@@ -12,6 +12,7 @@ import com.litesuits.orm.db.enums.AssignType;
 @Table("step_hour")
 public class StepHour extends StepValues{
 
+    public static String TABLE = "step_hour";
     public StepHour(long time,int step){
         super(time,step);
     }

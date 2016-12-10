@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyStepCounter</string>
+    <string name="app_name">一个计步器</string>
     <string name="tab_weibo">weibo</string>
     <string name="action_search">search</string>
     <string name="action_group_chat">group</string>
@@ -22,13 +22,13 @@
     <string name="kal_count">消耗卡路里</string>
     <string name="username">zsw</string>
     <string name="title_home">主页</string>
-    <string name="title_group">好友</string>
+    <string name="title_group">新闻</string>
     <string name="title_statistics">统计</string>
-    <string name="title_user"></string>
+    <string name="title_user">我</string>
     <string name="weibo">微博绑定</string>
     <string name="notice">我的通知</string>
     <string name="recommend">我的推荐</string>
-    <string name="share_user">我的分享</string>
+    <string name="share_user">分享应用</string>
     <string name="info">关于应用</string>
     <string name="speed_rank">速度榜</string>
     <string name="distance_rank">距离榜</string>
@@ -37,5 +37,23 @@
     <string name="challenge">挑战</string>
     <string name="step">步</string>
     <string name="pre_step">你已走了</string>
-
+    <string name="user_info_username">用户名</string>
+    <string name="user_height">身高</string>
+    <string name="user_weight">体重</string>
+    <string name="user_email">邮箱</string>
+    <string name="login_username">请输入您的用户名</string>
+    <string name="login_password">请输入您的密码</string>
+    <string name="register_email">请输入您的邮箱</string>
+    <string name="password_forget">忘记密码?</string>
+    <string name="register_forget">请务必填写邮箱，以防止丢失密码后无法登陆</string>
+    <string name="appName">思康计步器</string>
+    <string name="save">保存</string>
+    <string name="back">返回</string>
+    <string name="user_step">累计达到%1$d步</string>
+    <string name="passwordRepeat">重复您的密码</string>
+    <string name="user_sex">性别</string>
+    <string name="signout">退出登录</string>
+    <string name="stepCount">%1$d步</string>
+    <string name="stepDis">%1$dm</string>
+    <string name="stepKal">%1$dkal</string>
 </resources>

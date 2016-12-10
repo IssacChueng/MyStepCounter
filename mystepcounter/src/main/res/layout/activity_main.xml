@@ -7,12 +7,51 @@
     tools:context="com.issac.mystepcounter.MainActivity"
     android:orientation="vertical">
 
-    <include layout="@layout/title"></include>
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:id="@+id/user_info_title"
+        android:background="@color/background"
+        >
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.issac.mystepcounter.view.CircleImageView
+                android:id="@+id/img_avatar"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:src="@mipmap/ic_user"
+                app:border_color="@android:color/white"
+                android:layout_gravity="center_vertical|start"
+                app:border_width="1dp"/>
+
+            <TextView
+                android:id="@+id/text_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_home"
+                android:layout_gravity="center"
+                android:textSize="@dimen/font_large"
+                android:textColor="@android:color/white"/>
+            <ImageView
+                android:id="@+id/img_share"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="6dp"
+                android:layout_gravity="center_vertical|end"
+                android:tint="@android:color/white"
+                android:src="@mipmap/ic_share"/>
+        </FrameLayout>
+
+    </android.support.v7.widget.Toolbar>
+
     <com.issac.mystepcounter.view.NoScrollViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"></com.issac.mystepcounter.view.NoScrollViewPager>
+        android:layout_weight="1"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,7 +74,7 @@
             android:layout_weight="1"
             android:padding="5dp"
             app:micon="@mipmap/ic_ranking"
-            app:m_text="排行"/>
+            app:m_text="新闻"/>
         <com.issac.mystepcounter.view.ChangeColorWithIconView
             android:id="@+id/statistics"
             android:layout_width="0dp"

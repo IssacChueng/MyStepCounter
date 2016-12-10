@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#1199FF</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#33475f</color>
+    <color name="colorPrimaryDark">#4b475f</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorBtnDown">#BB0055</color>
-    <color name="avatarBorder">#AAAAAA</color>
-
+    <color name="avatarBorder">#FFFFF0</color>
+    <color name="pick_btn">#F8F8FF</color>
     <color name="percentageFillColor">#14B9D6</color>
     <color name="percentageBackColor">#CCCCCC</color>
     <color name="percentageTextBackground">#323A45</color>
@@ -13,4 +13,18 @@
     <color name="lineandcircle">#FF3300</color>
     <color name="userBack">#DDDDDD</color>
     <color name="tabStrip">#14B9D6</color>
+    <color name="username">#A2AAA5</color>
+    <color name="background">#14B9D6</color>
+    <color name="font_head">#484848</color>
+    <color name="font_content">#787878</color>
+    <color name="divider">#D8D8D8</color>
+    <color name="font_title">#333</color>
+    <color name="user_back">#F8F8FF</color>
+    <color name="user_border">#787878</color>
+    <color name="border_block">#EAEAEA</color>
+    <color name="btn_click">#787878</color>
+    <color name="font_other">#4b475f</color>
+    <color name="font_normal">#EAEAEA</color>
+    <color name="font_pick">#5E5EA2</color>
+    <color name="global_back">#F8F8FF</color>
 </resources>

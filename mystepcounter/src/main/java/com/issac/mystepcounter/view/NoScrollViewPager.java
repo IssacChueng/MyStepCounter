@@ -37,7 +37,7 @@ public class NoScrollViewPager extends ViewPager {
             return super.onTouchEvent(ev);
         }*/
 //        return super.onTouchEvent(ev);
-        return false;
+        return true;
 
     }
 

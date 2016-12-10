@@ -1,34 +1,25 @@
 package com.issac.mystepcounter.pojo;
 
+import java.io.Serializable;
+
 /**
  * Created by zhans on 2016/11/11.
  */
 
-public class News {
+public class News implements Serializable{
     private String title;
     private String date;
-    private String source;
+    private String category;
+    private String author_name;
+    private String thumbnail_pic_s;
     private String url;
+    private String thumbnail_pic_s03;
 
-    public String getPicUrl() {
-        return picUrl;
-    }
 
-    public void setPicUrl(String picUrl) {
-        this.picUrl = picUrl;
-    }
-
-    private String picUrl;
 
     public News() {
     }
 
-    public News(String title, String date, String source, String url) {
-        this.title = title;
-        this.date = date;
-        this.source = source;
-        this.url = url;
-    }
 
     public String getTitle() {
         return title;
@@ -46,19 +37,58 @@ public class News {
         this.date = date;
     }
 
-    public String getSource() {
-        return source;
+
+    public String getCategory() {
+        return category;
     }
 
-    public void setSource(String source) {
-        this.source = source;
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getAuthor_name() {
+        return author_name;
+    }
+
+    public void setAuthor_name(String author_name) {
+        this.author_name = author_name;
+    }
+
+    public String getThumbnail_pic_s() {
+        return thumbnail_pic_s;
+    }
+
+    public void setThumbnail_pic_s(String thumbnail_pic_s) {
+        this.thumbnail_pic_s = thumbnail_pic_s;
+    }
+
+    public String getThumbnail_pic_s03() {
+        return thumbnail_pic_s03;
+    }
+
+    public void setThumbnail_pic_s03(String thumbnail_pic_s03) {
+        this.thumbnail_pic_s03 = thumbnail_pic_s03;
     }
 
     public String getUrl() {
+        //url.replaceAll("\\\\","");
         return url;
     }
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    @Override
+    public String toString() {
+        return "News{" +
+                "title='" + title + '\'' +
+                ", date='" + date + '\'' +
+                ", category='" + category + '\'' +
+                ", author_name='" + author_name + '\'' +
+                ", thumbnail_pic_s='" + thumbnail_pic_s + '\'' +
+                ", url='" + url + '\'' +
+                ", thumbnail_pic_s03='" + thumbnail_pic_s03 + '\'' +
+                '}';
     }
 }

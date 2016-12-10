@@ -11,6 +11,7 @@ import com.litesuits.orm.db.enums.AssignType;
 
 @Table("step_month")
 public class StepMonth extends StepValues{
+    public static String TABLE  = "step_month";
     public StepMonth(long time, int step) {
         super(time, step);
     }

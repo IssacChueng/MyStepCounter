@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
+        <Button
+            android:id="@+id/logout_confirm"
+            android:text="确定要退出吗"
+            android:textColor="@color/font_pick"
+            android:textSize="@dimen/font_user_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/pick_btn"/>
+    </FrameLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
+    <Button
+        android:id="@+id/logout_cancel"
+        android:text="取消"
+        android:textSize="@dimen/font_user_edit"
+        android:textColor="@color/font_pick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/pick_btn"/>
+    </FrameLayout>
+</LinearLayout>

@@ -22,17 +22,33 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.issac.mystepcounter.AppContext;
 import com.issac.mystepcounter.MainActivity;
 import com.issac.mystepcounter.R;
+import com.issac.mystepcounter.pojo.StepDay;
+import com.issac.mystepcounter.pojo.StepMonth;
+import com.issac.mystepcounter.pojo.StepValues;
+import com.issac.mystepcounter.pojo.StepWeek;
+import com.issac.mystepcounter.pojo.User;
+import com.issac.mystepcounter.utils.DbUtils;
 import com.issac.mystepcounter.utils.MyDateFormatter;
 import com.issac.mystepcounter.utils.MyMonthFormatter;
 import com.issac.mystepcounter.utils.MyWeekFormatter;
 import com.issac.mystepcounter.view.ColorTextStrip;
 import com.issac.mystepcounter.view.MyMarkerView;
-import com.issac.mystepcounter.view.NoScrollViewPager;
+import com.litesuits.orm.db.assit.QueryBuilder;
 
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import cn.bmob.v3.BmobUser;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,6 +82,7 @@ public class FragmentStatistics extends Fragment implements View.OnClickListener
     private ArrayList<ColorTextStrip> titleContainer = new ArrayList<>();
     public String tag = "TAG";
     private int p=0;
+    private static final float disPerStep = 7f;
     //--------------------------------------------------------
 
 
@@ -106,17 +123,22 @@ public class FragmentStatistics extends Fragment implements View.OnClickListener
         Log.i("Main","onCreateView-------------------");
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_statistics, container, false);
+        initWidget(view);
+        return view;
+    }
+
+    private void initWidget(View view) {
         Context mContext = getContext();
         pager = (ViewPager) view.findViewById(R.id.chartContainer);
         mLineChartDate = new LineChart(mContext,null);
         mLineChartMonth = new LineChart(mContext,null);
         mLineChartWeek = new LineChart(mContext,null);
         initChart(mLineChartDate,1);
-        initChart(mLineChartMonth,2);
-        initChart(mLineChartWeek,3);
+        initChart(mLineChartWeek,2);
+        initChart(mLineChartMonth,3);
         viewContainer.add(mLineChartDate);
-        viewContainer.add(mLineChartMonth);
         viewContainer.add(mLineChartWeek);
+        viewContainer.add(mLineChartMonth);
         tab1 = (ColorTextStrip) view.findViewById(R.id.tab_1);
         tab1.drawColor(255);
         tab2 = (ColorTextStrip) view.findViewById(R.id.tab_2);
@@ -194,7 +216,41 @@ public class FragmentStatistics extends Fragment implements View.OnClickListener
 
             }
         });
-        return view;
+
+        tv_stepCounts = (TextView) view.findViewById(R.id.tv_stepCounts);
+        tv_distance = (TextView) view.findViewById(R.id.tv_distance);
+        tv_kal = (TextView) view.findViewById(R.id.tv_kal);
+        initData();
+    }
+
+    private void initData() {
+        //tv_stepCounts.setText(0+"步");
+        final String step = getString(R.string.stepCount);
+        final String dis = getString(R.string.stepDis);
+        final String kal = getString(R.string.stepKal);
+
+        Observable.interval(0L,5L,TimeUnit.SECONDS)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Long>() {
+                    @Override
+                    public void call(Long aLong) {
+                        float height = 1.7f;
+                        float weight = 60f;
+                        if (AppContext.HASUSER){
+                            User user = BmobUser.getCurrentUser(User.class);
+                            height = Float.valueOf(user.getHeight());
+                            weight = Float.valueOf(user.getWeight());
+                        }
+                        float Dis = MainActivity.steps*height/disPerStep;
+                        String newStep = String.format(step,MainActivity.steps);
+                        String newDis = String.format(dis,(int)(MainActivity.steps*height/disPerStep));
+                        String newKal = String.format(kal,(int)(0.57*Dis*weight));
+                        tv_stepCounts.setText(newStep);
+                        tv_distance.setText(newDis);
+                        tv_distance.setText(newKal);
+                    }
+                });
     }
 
     private void initChart(LineChart lineChart,int flag) {
@@ -244,7 +300,7 @@ public class FragmentStatistics extends Fragment implements View.OnClickListener
         yAxis.setAxisMaxValue(200f);
         yAxis.setAxisMinValue(0f);
         lineChart.getAxisRight().setEnabled(false);
-        setData(lineChart,7,0);
+        getData(lineChart, StepMonth.class,StepMonth.TABLE);
 
 
     }
@@ -261,7 +317,7 @@ public class FragmentStatistics extends Fragment implements View.OnClickListener
         yAxis.setAxisMaxValue(200f);
         yAxis.setAxisMinValue(0f);
         lineChart.getAxisRight().setEnabled(false);
-        setData(lineChart,7,0);
+        getData(lineChart, StepWeek.class,StepWeek.TABLE);
 
     }
 
@@ -275,15 +331,66 @@ public class FragmentStatistics extends Fragment implements View.OnClickListener
         yAxis.setAxisMaxValue(200f);
         yAxis.setAxisMinValue(0f);
         lineChart.getAxisRight().setEnabled(false);
-        setData(lineChart,7,0);
+        getData(lineChart, StepDay.class,StepDay.TABLE);
 
     }
 
-    private void setData(LineChart mLineChart, int count, int initdata) {
-        ArrayList<Entry> values = new ArrayList<>(10);
-        /*for (int i=0;i<count;i++){
-            values.add(new Entry(i,10));
-        }*/
+    private <T extends StepValues> void getData(final LineChart mLineChart, final Class<T> claxx, final String tableName){
+        Observable.just(1L)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.io())
+                .map(new Func1<Long, List<T>>() {
+                    @Override
+                    public List<T> call(Long aLong) {
+                        List<T> stepValue;
+                        stepValue = DbUtils.liteOrm.query(QueryBuilder.create(claxx).orderBy(StepValues.TIME).limit("7"));
+                        Log.i("main",stepValue.size()+"");
+                        return stepValue;
+                    }
+                })
+                .observeOn(Schedulers.computation())
+                .map(new Func1<List<T>, float[]>() {
+                    @Override
+                    public float[] call(List<T> stepValue) {
+                        float[] steps=null;
+                        if (stepValue!= null && stepValue.size()>0){
+                            //将0点置为0步
+                            steps = new float[7];
+                            T step;
+                            Log.i("main","stepValue.size ="+stepValue.size());
+                            for (int i=1;i<stepValue.size();i++){
+                                step = stepValue.get(i);
+                                steps[i] = step.getStep();
+                            }
+
+
+                        }
+                        return steps;
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<float[]>() {
+                    @Override
+                    public void call(float[] ints) {
+                        float[] data = new float[7];
+                        if(ints!=null) {
+                            for (int i = 0; i < ints.length; i++) {
+                                data[i] = ints[i];
+                            }
+                        }
+                            setData(mLineChart, data);
+                    }
+                });
+    }
+
+    private void setData(LineChart mLineChart, float[] initdata) {
+        ArrayList<Entry> values = new ArrayList<>();
+        int count = initdata.length-1;
+        for (int i=0;i<initdata.length;i++){
+            values.add(new Entry(i,initdata[count]));
+            count--;
+        }
+
         Log.i("Main",values+"-------------------------------------------------------------------------------------");
         LineDataSet set1;
         if (mLineChart.getData() != null && mLineChart.getData().getDataSetCount() >0){

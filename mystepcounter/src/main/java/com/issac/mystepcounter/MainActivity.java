@@ -1,5 +1,6 @@
 package com.issac.mystepcounter;
 
+import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -10,12 +11,12 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.ShareActionProvider;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -23,27 +24,24 @@ import android.view.ViewConfiguration;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.issac.mystepcounter.fragment.FragmentGroup;
+import com.issac.mystepcounter.fragment.FragmentNews;
 import com.issac.mystepcounter.fragment.FragmentHomePage;
 import com.issac.mystepcounter.fragment.FragmentStatistics;
 import com.issac.mystepcounter.fragment.FragmentUser;
-import com.issac.mystepcounter.pojo.StepHour;
 import com.issac.mystepcounter.service.StepService;
 import com.issac.mystepcounter.utils.Constant;
 import com.issac.mystepcounter.utils.DbUtils;
-import com.issac.mystepcounter.utils.HttpUtil;
 import com.issac.mystepcounter.utils.PreferenceHelper;
 import com.issac.mystepcounter.view.ChangeColorWithIconView;
 import com.issac.mystepcounter.view.CircleImageView;
 import com.issac.mystepcounter.view.NoScrollViewPager;
-import com.issac.mystepcounter.view.PieView;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.PersistentCookieStore;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -59,13 +57,13 @@ public class MainActivity extends AppCompatActivity implements
     private ImageView img_share;
     private CircleImageView img_avatar;
     private TextView textTitle;
-    private View title_line;
     private Messenger messenger;
     private Messenger  mGetReplyMessenger = new Messenger(new Handler(this));
     private Handler delayHandler;
     private FragmentHomePage fragmentHomePage;
     private Message UIMessage;
     private Handler UIHandler;
+    public static int steps = 1;
 
     ServiceConnection conn = new ServiceConnection() {
         @Override
@@ -93,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        requestFeature();
         setContentView(R.layout.activity_main);
         setOverflowShowingAlways();
         //getActionBar().setDisplayShowHomeEnabled(false);
@@ -102,18 +101,17 @@ public class MainActivity extends AppCompatActivity implements
         img_share = (ImageView) findViewById(R.id.img_share);
         img_avatar = (CircleImageView) findViewById(R.id.img_avatar);
         textTitle = (TextView) findViewById(R.id.text_title);
-        title_line = findViewById(R.id.title_line);
-        initHttp();
+        img_share.setOnClickListener(this);
         initDatas();
         mViewPager.setAdapter(mAdapter);
         mViewPager.addOnPageChangeListener(this);
     }
 
-    private void initHttp() {
-        AsyncHttpClient client = new AsyncHttpClient();
-        PersistentCookieStore myCookieStore = new PersistentCookieStore(this);
-        client.setCookieStore(myCookieStore);
-        HttpUtil.setClient(client);
+    @TargetApi(21)
+    private void requestFeature(){
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        getWindow().setReenterTransition(new Slide());
+        getWindow().setEnterTransition(new Slide());
     }
 
 
@@ -122,9 +120,9 @@ public class MainActivity extends AppCompatActivity implements
         delayHandler = new Handler(this);
 
         fragmentHomePage =new FragmentHomePage();
-        FragmentGroup fGroup = new FragmentGroup();
-        FragmentStatistics fStatistics = new FragmentStatistics();
-        FragmentUser fUser = new FragmentUser();
+        FragmentNews fGroup = new FragmentNews();
+        FragmentStatistics fStatistics = FragmentStatistics.newInstance("","");
+        FragmentUser fUser =FragmentUser.newInstance("","");
         mTabs.add(fragmentHomePage);
         mTabs.add(fGroup);
         mTabs.add(fStatistics);
@@ -175,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements
         three.setOnClickListener(this);
         four.setOnClickListener(this);
 
+
         one.setIconAlpha(1.0f);
     }
 
@@ -185,11 +184,9 @@ public class MainActivity extends AppCompatActivity implements
         if (position != 3){
             img_share.setVisibility(View.VISIBLE);
             img_avatar.setVisibility(View.VISIBLE);
-            title_line.setVisibility(View.VISIBLE);
         }else{
             img_share.setVisibility(View.GONE);
             img_avatar.setVisibility(View.GONE);
-            title_line.setVisibility(View.GONE);
         }
         switch (position){
             case 0:
@@ -261,7 +258,11 @@ public class MainActivity extends AppCompatActivity implements
                 mTabIndicator.get(3).setIconAlpha(1.0f);
                 mViewPager.setCurrentItem(3, false);
                 break;
+            case R.id.img_share:
+                AppContext.shootLoacleView(this,AppContext.SHARE_FILE);
 
+                AppContext.shareMsg(this,"share","dhizhi","msgText",AppContext.SHARE_FILE);
+                break;
         }
 
     }
@@ -355,8 +356,9 @@ public class MainActivity extends AppCompatActivity implements
         switch (msg.what) {
             case Constant.MSG_FROM_SERVER:
                 // 更新界面上的步数
-                Log.i("step",msg.getData().getInt("step")+"");
+                //Log.i("step",msg.getData().getInt("step")+"");
                 UIMessage = Message.obtain(UIHandler,msg.getData().getInt("step"));
+                steps = msg.getData().getInt("step");
                 UIMessage.sendToTarget();
                 delayHandler.sendEmptyMessageDelayed(Constant.REQUEST_SERVER, TIME_INTERVAL);
                 break;

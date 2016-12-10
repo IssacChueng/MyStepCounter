@@ -10,6 +10,9 @@ import com.litesuits.orm.db.enums.AssignType;
  */
 
 public class StepValues {
+    public static String TABLE = "";
+    public static String TIME = "time";
+    public static String STEP = "step";
     @PrimaryKey(AssignType.AUTO_INCREMENT)
     private int id;
     @Column("time")

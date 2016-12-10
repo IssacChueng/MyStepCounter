@@ -5,4 +5,10 @@
     <dimen name="activity_horizontal_margin">64dp</dimen>
     <dimen name="textSize">25sp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="margin_block">15dp</dimen>
+    <dimen name="font_large">20sp</dimen>
+    <dimen name="font_normal">14sp</dimen>
+    <dimen name="font_title">16sp</dimen>
+    <dimen name="font_small">10sp</dimen>
+    <dimen name="font_user_edit">20sp</dimen>
 </resources>

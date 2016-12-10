@@ -74,9 +74,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_above="@+id/gray_line2"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginEnd="10dp"
@@ -88,7 +85,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/ic_foots"
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
                 android:tint="@color/tabStrip"
                 />
             <TextView
@@ -104,12 +101,11 @@
                 android:layout_weight="2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="步"
+                android:text="@string/stepCount"
                 android:textColor="@android:color/darker_gray"
                 android:typeface="sans"/>
         </LinearLayout>
         <View
-            android:layout_above="@+id/linear2"
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="@android:color/darker_gray"
@@ -120,9 +116,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_above="@+id/gray_line3"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginEnd="10dp"
@@ -134,7 +127,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/ic_distance"
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
                 android:tint="@color/tabStrip"
                 />
             <TextView
@@ -150,12 +143,11 @@
                 android:layout_weight="2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="步"
+                android:text="@string/stepDis"
                 android:textColor="@android:color/darker_gray"
                 android:typeface="sans"/>
         </LinearLayout>
         <View
-            android:layout_above="@+id/linear3"
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="@android:color/darker_gray"
@@ -166,13 +158,10 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
-            android:layout_alignParentBottom="true"
             android:padding="10dp"
             >
             <ImageView
@@ -180,7 +169,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/ic_energy"
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
                 android:tint="@color/tabStrip"
                 />
             <TextView
@@ -196,10 +185,11 @@
                 android:layout_weight="2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="步"
+                android:text="@string/stepKal"
                 android:textColor="@android:color/darker_gray"
                 android:typeface="sans"/>
         </LinearLayout>
+
 
     </LinearLayout>
 

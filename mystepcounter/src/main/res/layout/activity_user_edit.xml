@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_user_edit"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.issac.mystepcounter.UserEdit">
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:id="@+id/user_edit_title"
+        android:background="@color/background"
+        >
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/user_edit_back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center|start"
+                android:tint="@android:color/white"
+                android:src="@mipmap/back"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="25sp"
+                android:text="@string/back"
+                android:textColor="@android:color/white"
+                android:gravity="center_vertical"
+                android:layout_marginStart="30dp"
+                android:layout_gravity="center|start"
+             />
+        </FrameLayout>
+
+    </android.support.v7.widget.Toolbar>
+    <View
+        android:layout_below="@id/user_edit_title"
+        android:layout_width="match_parent"
+        android:background="@color/divider"
+        android:layout_marginTop="5dp"
+        android:layout_height="1dp"/>
+    <RelativeLayout
+        android:id="@+id/user_edit_background"
+        android:layout_below="@+id/user_edit_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:padding="10dp"
+        android:background="@android:color/white"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/user_edit_avatar"
+            android:layout_alignBottom="@+id/user_edit_avatar"
+            android:text="头像"
+            android:textSize="25sp"
+            android:gravity="center"
+            android:layout_marginLeft="30dp"
+            android:layout_marginStart="30dp"
+            />
+        <com.issac.mystepcounter.view.CircleImageView
+            android:id="@+id/user_edit_avatar"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:src="@mipmap/ic_user"
+            app:border_width="1px"
+            app:border_color="@color/user_border"
+            android:background="@drawable/avatar_back"
+            android:layout_marginEnd="25dp"
+            />
+
+
+
+
+
+    </RelativeLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:paddingTop="5dp"
+        android:paddingBottom="10dp"
+        android:layout_below="@+id/user_edit_background"
+        android:layout_width="match_parent"
+        android:elevation="5dp"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:background="@android:color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:padding="10dp"
+            android:layout_marginBottom="1dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:typeface="monospace"
+                android:textSize="@dimen/font_user_edit"
+                android:textColor="@color/font_content"
+                android:text="@string/user_info_username"
+                android:layout_marginLeft="30dp"
+                android:layout_marginStart="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/user_edit_username"
+                android:text="@string/user_info_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_user_edit"
+                android:gravity="center_horizontal|end"
+                android:layout_marginEnd="25dp"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:background="@android:color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:padding="10dp"
+            android:layout_marginBottom="1dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:typeface="monospace"
+                android:textSize="@dimen/font_user_edit"
+                android:textColor="@color/font_content"
+                android:text="@string/user_sex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"/>
+
+            <TextView
+                android:id="@+id/user_edit_sex"
+                android:typeface="monospace"
+                android:textSize="@dimen/font_user_edit"
+                android:text="男"
+                android:textColor="@color/font_content"
+                android:layout_marginEnd="25dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|end"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:background="@android:color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:padding="10dp"
+            android:layout_marginBottom="1dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:typeface="monospace"
+                android:textSize="@dimen/font_user_edit"
+                android:textColor="@color/font_content"
+                android:text="@string/user_height"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"/>
+
+            <TextView
+                android:id="@+id/user_edit_height"
+                android:typeface="monospace"
+                android:textSize="@dimen/font_user_edit"
+                android:text="170cm"
+                android:textColor="@color/font_content"
+                android:layout_marginEnd="25dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|end"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:background="@android:color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:padding="10dp"
+            android:layout_marginBottom="1dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:typeface="monospace"
+                android:textSize="@dimen/font_user_edit"
+                android:text="@string/user_weight"
+                android:textColor="@color/font_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                />
+            <TextView
+                android:id="@+id/user_edit_weight"
+                android:typeface="monospace"
+                android:textSize="@dimen/font_user_edit"
+                android:textColor="@color/font_content"
+                android:text="100kg"
+                android:gravity="center_vertical|end"
+                android:layout_marginEnd="25dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:background="@android:color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:padding="10dp"
+            android:layout_marginBottom="1dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:typeface="monospace"
+                android:textSize="@dimen/font_user_edit"
+                android:text="@string/user_email"
+                android:textColor="@color/font_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"/>
+            <TextView
+                android:id="@+id/user_edit_email"
+                android:typeface="monospace"
+                android:textSize="@dimen/font_user_edit"
+                android:text="xxx@xxx.com"
+                android:textColor="@color/font_content"
+                android:layout_marginEnd="25dp"
+                android:gravity="center_vertical|end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <Button
+            android:text="@string/save"
+            android:textSize="25sp"
+            android:textColor="@color/font_normal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="5dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/login_btn"
+            android:id="@+id/user_edit_save" />
+    </LinearLayout>
+
+
+</RelativeLayout>

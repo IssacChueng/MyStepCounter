@@ -13,7 +13,11 @@ import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.IdRes;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.issac.mystepcounter.R;
@@ -51,6 +55,7 @@ public class CircleImageView extends ImageView {
 
     private boolean mReady;
     private boolean mSetupPending;
+
 
     public CircleImageView(Context context) {
         super(context);
@@ -136,6 +141,7 @@ public class CircleImageView extends ImageView {
         mBorderWidth = borderWidth;
         setup();
     }
+
 
     @Override
     public void setImageBitmap(Bitmap bm) {
@@ -238,6 +244,7 @@ public class CircleImageView extends ImageView {
 
         mBitmapShader.setLocalMatrix(mShaderMatrix);
     }
+
 
 
 }

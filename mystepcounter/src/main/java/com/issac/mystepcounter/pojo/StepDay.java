@@ -11,7 +11,7 @@ import com.litesuits.orm.db.enums.AssignType;
 @Table("step_day")
 public class StepDay extends StepValues{
 
-
+    public static String TABLE = "step_day";
     public StepDay(long date, int step) {
         super(date,step);
     }
