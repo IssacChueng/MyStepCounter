@@ -6,17 +6,4 @@
 ![alt tag](https://github.com/IssacChueng/MyStepCounter/blob/master/design/2016-12-16-12-54-07.png?raw=true)
 ![alt tag](https://github.com/IssacChueng/MyStepCounter/blob/master/design/2016-12-16-12-54-14.png?raw=true)
 
-<html>
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-
-    <title>Test</title>
-
-</head>
-<body>
-
-    <img style="display:block;width:100%;" src="test.png" />
-
-</body>
-
-</html>
+后端用bmob，orm用ormlite，分两个进程，一个主进程用于完成主要显示功能和其他的逻辑，子进程为一个service,负责接收加速度传感器的数值，实时计算出步数，分为4张表，每小时存储一次，每天存储一次，每周存储一次，每月存储一次。
