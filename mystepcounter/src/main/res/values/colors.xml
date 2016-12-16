@@ -19,7 +19,7 @@
     <color name="font_content">#787878</color>
     <color name="divider">#D8D8D8</color>
     <color name="font_title">#333</color>
-    <color name="user_back">#F8F8FF</color>
+    <color name="user_back">#F8F8F8</color>
     <color name="user_border">#787878</color>
     <color name="border_block">#EAEAEA</color>
     <color name="btn_click">#787878</color>

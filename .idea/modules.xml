@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/MyStepCounter.iml" filepath="$PROJECT_DIR$/MyStepCounter.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/mystepcounter/mystepcounter.iml" filepath="$PROJECT_DIR$/mystepcounter/mystepcounter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/weiboSDK/weiboSDK.iml" filepath="$PROJECT_DIR$/weiboSDK/weiboSDK.iml" />
     </modules>
   </component>
 </project>

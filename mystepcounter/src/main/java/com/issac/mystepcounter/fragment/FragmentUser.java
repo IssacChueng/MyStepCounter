@@ -18,7 +18,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.issac.mystepcounter.AppContext;
 import com.issac.mystepcounter.Login;
@@ -26,6 +28,7 @@ import com.issac.mystepcounter.MainActivity;
 import com.issac.mystepcounter.R;
 import com.issac.mystepcounter.UserActivity;
 import com.issac.mystepcounter.pojo.User;
+import com.issac.mystepcounter.view.AboutA;
 import com.issac.mystepcounter.view.CircleImageView;
 
 import java.io.File;
@@ -34,6 +37,8 @@ import java.io.FileNotFoundException;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -58,6 +63,9 @@ public class FragmentUser extends Fragment implements OnClickListener{
     private TextView userName;
     private String path;
     public static int RESULT_LOGOUT=1;
+    public static int RESULT_REGISTER = 2;
+    private LinearLayout clickAbout;
+
     //-------------------------------
 
     public FragmentUser() {
@@ -96,13 +104,20 @@ public class FragmentUser extends Fragment implements OnClickListener{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_user, container, false);
-        avatar = (CircleImageView) root.findViewById(R.id.img_avatar_big);
-        userName = (TextView) root.findViewById(R.id.user_name);
+        initWidget(root);
+
         userName.setOnClickListener(this);
         avatar.setOnClickListener(this);
+        clickAbout.setOnClickListener(this);
         Log.i("click","avatar.hasListener"+avatar.hasOnClickListeners());
         initUser();
         return root;
+    }
+
+    private void initWidget(View root) {
+        avatar = (CircleImageView) root.findViewById(R.id.img_avatar_big);
+        userName = (TextView) root.findViewById(R.id.user_name);
+        clickAbout = (LinearLayout) root.findViewById(R.id.click_about);
     }
 
     @Override
@@ -111,13 +126,14 @@ public class FragmentUser extends Fragment implements OnClickListener{
             initUser();
         }else if(resultCode == RESULT_LOGOUT){
             initUser();
+        }else if (resultCode == RESULT_REGISTER){
+
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void initUser(){
         Log.i(AppContext.Tag,AppContext.HASUSER+"");
-
         if (AppContext.HASUSER){
             User user = BmobUser.getCurrentUser(User.class);
             /*BmobFile file = user.getAvatar();
@@ -125,11 +141,13 @@ public class FragmentUser extends Fragment implements OnClickListener{
             Log.i(AppContext.Tag,AppContext.HASUSER+""+"username="+BmobUser.getCurrentUser().getUsername());
             Log.i(AppContext.Tag,getActivity().getFilesDir()+AppContext.avatarFileName);
             avatar.setImageBitmap(AppContext.getBitmapByUrl(getActivity().getFilesDir()+AppContext.avatarFileName));
+            ((MainActivity)getActivity()).setUserImg();
             userName.setText(user.getUsername());
 
         }else {
-            userName.setText(null);
-            avatar.setImageBitmap(AppContext.getBitmapById(R.mipmap.ic_user));
+            userName.setText(R.string.click_and_login);
+            avatar.setImageBitmap(AppContext.getBitmapById(R.mipmap.tourist));
+            ((MainActivity)getActivity()).resetUserImg();
         }
     }
 
@@ -162,30 +180,20 @@ public class FragmentUser extends Fragment implements OnClickListener{
                     startActivityForResult(intent,0);
                 }
                 break;
-            case R.id.user_name:
-                Log.i("click","clickavatar");
-                if (AppContext.HASUSER){
-                    /*Intent intent = new Intent();
-                    intent.setType("image*//*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(intent,1);*/
-                    Intent intent = new Intent(getActivity(), UserActivity.class);
-                    startActivityForResult(intent,0);
-                }else{
-                    //// TODO: 2016/11/24 登录注册页
-                    Intent intent = new Intent(getActivity(), Login.class);
-                    startActivityForResult(intent,0);
-                }
-                break;
             case R.id.click_weibo:
                 break;
             case R.id.click_noti:
+                Toast.makeText(getContext(),"暂无通知",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.click_share:
+                AppContext.shootLoacleView(getActivity(),AppContext.SHARE_FILE);
+                AppContext.shareMsg(getActivity(),"share","dhizhi","msgText",AppContext.SHARE_FILE);
                 break;
             case R.id.click_app:
+                Toast.makeText(getContext(),"暂无推荐",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.click_about:
+                startActivity(new Intent(getContext(), AboutA.class));
                 break;
         }
     }

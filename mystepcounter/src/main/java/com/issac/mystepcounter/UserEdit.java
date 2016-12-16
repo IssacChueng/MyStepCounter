@@ -186,18 +186,23 @@ public class UserEdit extends AppCompatActivity implements View.OnClickListener{
         changed = true;
         switch (type){
             case MyPopupWindow.TYPE_USERNAME:
+                mUsername.setText(userEdit);
                 newUser.setUsername(userEdit);
                 break;
             case MyPopupWindow.TYPE_SEX:
+                mSex.setText(userEdit==AppContext.FEMALE ? "女" : "男");
                 newUser.setSex(userEdit);
                 break;
             case MyPopupWindow.TYPE_HEIGHT:
+                mHeight.setText(userEdit);
                 newUser.setHeight(userEdit);
                 break;
             case MyPopupWindow.TYPE_WEIGHT:
+                mWeight.setText(userEdit);
                 newUser.setWeight(userEdit);
                 break;
             case MyPopupWindow.TYPE_EMAIL:
+                mEmail.setText(userEdit);
                 newUser.setEmail(userEdit);
                 break;
         }
@@ -209,8 +214,9 @@ public class UserEdit extends AppCompatActivity implements View.OnClickListener{
     private void saveUser() {
 
         Log.i("changed","changed="+changed);
+        String id = AppContext.getString("id");
         if (changed) {
-            newUser.update(user.getObjectId(), new UpdateListener() {
+            newUser.update(id, new UpdateListener() {
                 @Override
                 public void done(BmobException e) {
                     if (e == null) {
@@ -220,7 +226,7 @@ public class UserEdit extends AppCompatActivity implements View.OnClickListener{
                         finish();
                     } else {
                         Toast.makeText(UserEdit.this, "更新失败，请稍后重试"+e.getMessage(), Toast.LENGTH_SHORT).show();
-                        Log.i("changed",e.getMessage()+e.getErrorCode());
+                        Log.e(AppContext.Tag,e.getMessage()+e.getErrorCode()+":"+BmobUser.getCurrentUser().getObjectId());
                         setResult(RESULT_CANCELED,intent);
                     }
                 }
@@ -341,7 +347,7 @@ public class UserEdit extends AppCompatActivity implements View.OnClickListener{
                                     mAvatar.setImageBitmap(AppContext.getBitmapByUrl(s));
                                     changed = true;
                                 }else{
-                                    Toast.makeText(UserEdit.this,"e="+e.getErrorCode()+":"+e.getMessage(),Toast.LENGTH_LONG).show();
+                                    //Toast.makeText(UserEdit.this,"e="+e.getErrorCode()+":"+e.getMessage(),Toast.LENGTH_LONG).show();
                                 }
                             }
 

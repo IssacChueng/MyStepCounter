@@ -56,4 +56,6 @@
     <string name="stepCount">%1$d步</string>
     <string name="stepDis">%1$dm</string>
     <string name="stepKal">%1$dkal</string>
+    <string name="about_app"><![CDATA[<a href=\"www.baidu.com\">baidu</a>]]></string>
+    <string name="click_and_login">点击头像登陆</string>
 </resources>

@@ -41,6 +41,7 @@ import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.DownloadFileListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UploadFileListener;
 import cn.bmob.v3.socketio.callback.EventCallback;
 
 /**
@@ -62,7 +63,7 @@ public class AppContext extends Application {
     public static String avatarFileName;
     public static User user;
     public static SharedPreferences preferences;
-    public static final String FILEURL = "http://bmob-cdn-7917.b0.upaiyun.com/2016/12/06/1249c88d3be84804911166b302ad6874.png";
+    public static final String FILEURL = "http://bmob-cdn-7917.b0.upaiyun.com/2016/12/16/5c35eaafb26240f7b9acd8f8b5a940d5.png";
     public static String SHARE_FILE = "";
     @Override
     public void onCreate() {
@@ -90,7 +91,7 @@ public class AppContext extends Application {
             APILEVEL = true;
         }
         if (isFirst) {
-            InputStream is = getResources().openRawResource(R.raw.ic_imgview);
+            InputStream is = getResources().openRawResource(R.raw.tourist);
             FileOutputStream fos = null;
             try {
                 fos = openFileOutput(file, MODE_PRIVATE);
@@ -124,6 +125,7 @@ public class AppContext extends Application {
             }
 
         }
+
     }
 
     private void initHttp() {
@@ -138,6 +140,17 @@ public class AppContext extends Application {
                 .setApplicationId(APPKEY).setConnectTimeout(30)
                 .build();
         Bmob.initialize(config);
+        BmobFile file1 = new BmobFile(new File(getFilesDir()+File.separator+file));
+        file1.upload(new UploadFileListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e==null){
+
+                }else{
+                    Log.e(Tag,e.getErrorCode()+":"+e.getMessage());
+                }
+            }
+        });
     }
 
     public void initLogin(){
@@ -287,6 +300,17 @@ public class AppContext extends Application {
         /*intent.putExtra(Intent.EXTRA_SUBJECT,msgTitle);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);*/
         a.startActivity(Intent.createChooser(intent,activityTitle));
+    }
+
+    //dp->px
+    public static int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+    //px->dp
+    public static int px2dip(Context context, float pxValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (pxValue / scale + 0.5f);
     }
 
 

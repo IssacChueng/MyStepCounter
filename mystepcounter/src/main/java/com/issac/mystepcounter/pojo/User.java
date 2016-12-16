@@ -15,6 +15,8 @@ public class User extends BmobUser {
     private String sex;
     private Integer stepCount;
 
+
+
     public String getSex() {
         return sex;
     }

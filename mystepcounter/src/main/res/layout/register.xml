@@ -2,239 +2,235 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:background="@color/global_back"
-    android:elevation="2dp"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/divider"/>
 
-    <com.issac.mystepcounter.view.CircleImageView
-        android:id="@+id/user_register_avatar"
-        android:src="@mipmap/ic_user"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:border_width="0.5px"
-        app:border_color="@color/user_border"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
+        android:elevation="5dp"
+        android:translationZ="5dp"
         android:orientation="vertical">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:paddingStart="0dp"
-        android:paddingEnd="@dimen/margin_block"
-        >
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_gravity="center_vertical|start"
-            android:layout_marginStart="5dp"
-            android:src="@mipmap/login_username"
-            />
-        <View
-            android:layout_width="1px"
-            android:layout_height="18dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="5dp"
-            android:background="@color/divider"
-            />
-        <android.support.design.widget.TextInputLayout
+
+        <com.issac.mystepcounter.view.CircleImageView
+            android:id="@+id/user_register_avatar"
+            android:src="@mipmap/tourist"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:border_width="0.5px"
+            app:border_color="@color/user_border"/>
+
+        <com.issac.mystepcounter.view.LoginLayout
+            android:id="@+id/login_register_layout"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|start"
-            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
             >
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/register_username"
-                android:hint="@string/login_username"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:imeOptions="actionNext"
-                android:inputType="text"
-                android:maxLines="1"
-                android:textColor="@color/font_title"
-                android:textSize="@dimen/font_title"
-
-                />
-        </android.support.design.widget.TextInputLayout>
-
-    </LinearLayout>
-    <View
-        android:layout_marginStart="35dp"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/divider"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:paddingStart="0dp"
-        android:paddingEnd="@dimen/margin_block"
-        >
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="5dp"
-            android:src="@mipmap/lock"
-            />
-        <View
-            android:layout_width="1px"
-            android:layout_height="18dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="5dp"
-            android:background="@color/divider"
-            />
-        <android.support.design.widget.TextInputLayout
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="10dp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:elevation="5dp"
+            android:translationZ="5dp"
+            android:background="@android:color/white"
             >
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/register_password_1"
-                android:hint="@string/login_password"
-                android:layout_width="match_parent"
+            <ImageView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@android:color/white"
-                android:gravity="center_vertical"
-                android:inputType="textPassword"
-                android:imeOptions="actionNext"
-                android:maxLines="1"
-                android:textColor="@color/font_title"
-                android:textSize="@dimen/font_title"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:src="@mipmap/login_username"
                 />
-        </android.support.design.widget.TextInputLayout>
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginStart="5dp"
+                android:background="@color/divider"
+                />
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/register_username"
+                    android:hint="@string/login_username"
+                    android:textColorHint="@color/username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@+id/register_password_1"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="@color/font_title"
+                    />
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:elevation="5dp"
+            android:translationZ="5dp"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
+                android:src="@mipmap/lock"
+                />
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginStart="5dp"
+                android:background="@color/divider"
+                />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/register_password_1"
+                    android:hint="@string/login_password"
+                    android:textColorHint="@color/username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@+id/register_password_2"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:textColor="@color/font_title"
+                    />
+            </android.support.design.widget.TextInputLayout>
+
+
         </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_marginStart="35dp"
-        android:layout_height="1px"
-        android:background="@color/divider"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:paddingStart="0dp"
-        android:paddingEnd="@dimen/margin_block"
-        android:orientation="horizontal"
-        >
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="5dp"
-            android:src="@mipmap/lock"
-            />
-        <View
-            android:layout_width="1px"
-            android:layout_height="18dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="5dp"
-            android:background="@color/divider"
-            />
-        <android.support.design.widget.TextInputLayout
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|start"
-            android:layout_marginStart="10dp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            >
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/register_password_2"
-                android:hint="@string/passwordRepeat"
-                android:layout_width="match_parent"
+            android:background="@android:color/white"
+            android:elevation="5dp"
+            android:translationZ="5dp"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp">
+            <ImageView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@android:color/white"
-                android:gravity="center_vertical"
-                android:imeOptions="actionNext"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:textColor="@color/font_title"
-                android:textSize="@dimen/font_title"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
+                android:src="@mipmap/lock"
                 />
-        </android.support.design.widget.TextInputLayout>
-    </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginStart="35dp"
-            android:background="@color/divider"
-            />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:paddingStart="0dp"
-        android:paddingEnd="@dimen/margin_block"
-        >
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginStart="5dp"
+                android:background="@color/divider"
+                />
 
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="5dp"
-            android:src="@mipmap/ic_email"
-            />
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/register_password_2"
+                    android:hint="@string/login_password"
+                    android:textColorHint="@color/username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@+id/register_email"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:textColor="@color/font_title"
+                    />
+            </android.support.design.widget.TextInputLayout>
 
-        <View
-            android:layout_width="1px"
-            android:layout_height="18dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="5dp"
-            android:background="@color/divider"
-            />
 
-        <android.support.design.widget.TextInputLayout
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|start"
-            android:layout_marginStart="10dp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            >
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/register_email"
-                android:hint="@string/register_email"
-                android:layout_width="match_parent"
+            android:background="@android:color/white"
+            android:elevation="5dp"
+            android:translationZ="5dp"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp">
+            <ImageView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@android:color/white"
-                android:gravity="center_vertical"
-                android:imeOptions="actionDone"
-                android:inputType="textEmailAddress"
-                android:maxLines="1"
-                android:textColor="@color/font_title"
-                android:textSize="@dimen/font_title"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
+                android:src="@mipmap/ic_email"
                 />
-        </android.support.design.widget.TextInputLayout>
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginStart="5dp"
+                android:background="@color/divider"
+                />
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/register_email"
+                    android:hint="@string/register_email"
+                    android:textColorHint="@color/username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:imeOptions="actionDone"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:textColor="@color/font_title"
+                    />
+            </android.support.design.widget.TextInputLayout>
 
-    </LinearLayout>
+
+        </LinearLayout>
+        </com.issac.mystepcounter.view.LoginLayout>
     </LinearLayout>
 
     <Button

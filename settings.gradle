@@ -1,1 +1,1 @@
-include ':app', ':mystepcounter'
+include ':app', ':mystepcounter', ':weiboSDK'

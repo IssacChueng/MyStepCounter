@@ -151,7 +151,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                         Log.i("changed","s="+s);
                         avatar.setImageBitmap(AppContext.getBitmapByUrl(s));
                     }else{
-                        Toast.makeText(UserActivity.this,"e="+e.getErrorCode()+":"+e.getMessage(),Toast.LENGTH_LONG).show();
+                        //Toast.makeText(UserActivity.this,"e="+e.getErrorCode()+":"+e.getMessage(),Toast.LENGTH_LONG).show();
                     }
                 }
 

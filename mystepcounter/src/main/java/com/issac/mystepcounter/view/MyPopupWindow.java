@@ -3,6 +3,8 @@ package com.issac.mystepcounter.view;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.renderscript.ScriptGroup;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.issac.mystepcounter.AppContext;
 import com.issac.mystepcounter.R;
@@ -90,7 +93,7 @@ public class MyPopupWindow extends PopupWindow {
             }
         });
     }
-    private void initCONFIRMVIEW(final Activity context, View.OnClickListener onClickListener) {
+    private void initCONFIRMVIEW(final Activity context, final View.OnClickListener onClickListener) {
         view  = inflater.inflate(R.layout.logout_confirm,null);
         Button logout_confirm = (Button) view.findViewById(R.id.logout_confirm);
         Button logout_cancel = (Button) view.findViewById(R.id.logout_cancel);
@@ -132,14 +135,29 @@ public class MyPopupWindow extends PopupWindow {
                 backgroundAlpha(context,1f);
             }
         });
+        if (type != TYPE_SEX){
+            sex.setVisibility(View.GONE);
+        }
         switch (type){
             case TYPE_SEX:
                 user.setVisibility(View.GONE);
+                sex.check(R.id.save_sex_male);
                 break;
             case TYPE_USERNAME:
-                sex.setVisibility(View.GONE);
-            default:
-                sex.setVisibility(View.GONE);
+                user.setHint("请输入用户名");
+                user.setInputType(InputType.TYPE_CLASS_TEXT);
+                break;
+            case TYPE_HEIGHT:
+                user.setHint("请输入身高");
+                user.setInputType(InputType.TYPE_CLASS_NUMBER);
+                break;
+            case TYPE_WEIGHT:
+                user.setHint("请输入体重");
+                user.setInputType(InputType.TYPE_CLASS_NUMBER);
+                break;
+            case TYPE_EMAIL:
+                user.setHint("请输入邮箱");
+                user.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
                 break;
         }
         user_save.setOnClickListener(onClickListener);

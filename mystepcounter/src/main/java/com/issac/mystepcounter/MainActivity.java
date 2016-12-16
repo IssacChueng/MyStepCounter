@@ -5,17 +5,20 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.ShareActionProvider;
+import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
 import android.util.Log;
 import android.view.Menu;
@@ -63,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements
     private FragmentHomePage fragmentHomePage;
     private Message UIMessage;
     private Handler UIHandler;
+    private Toolbar title;
     public static int steps = 1;
 
     ServiceConnection conn = new ServiceConnection() {
@@ -95,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         setOverflowShowingAlways();
         //getActionBar().setDisplayShowHomeEnabled(false);
+        title = (Toolbar) findViewById(R.id.user_info_title);
         mViewPager = (NoScrollViewPager) findViewById(R.id.viewPager);
         mViewPager.setNoScroll(true);
         mViewPager.setOffscreenPageLimit(4);
@@ -147,6 +152,13 @@ public class MainActivity extends AppCompatActivity implements
 
         initTabIndicator();
 
+        if (AppContext.HASUSER)
+        img_avatar.setImageBitmap(AppContext.getBitmapByUrl(getFilesDir()+AppContext.avatarFileName));
+
+    }
+
+    public void setUserImg(){
+        img_avatar.setImageBitmap(AppContext.getBitmapByUrl(getFilesDir()+AppContext.avatarFileName));
     }
 
   /*  @Override
@@ -184,9 +196,11 @@ public class MainActivity extends AppCompatActivity implements
         if (position != 3){
             img_share.setVisibility(View.VISIBLE);
             img_avatar.setVisibility(View.VISIBLE);
+            setElevation(5f);
         }else{
             img_share.setVisibility(View.GONE);
             img_avatar.setVisibility(View.GONE);
+            resetElevation();
         }
         switch (position){
             case 0:
@@ -202,6 +216,19 @@ public class MainActivity extends AppCompatActivity implements
                 textTitle.setText(getString(R.string.title_user));
                 break;
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setElevation(float dp){
+        float px = AppContext.dip2px(this,dp);
+        title.setElevation(px);
+        title.setTranslationZ(px);
+    }
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void resetElevation(){
+        title.setElevation(0f);
+        title.setTranslationZ(0f);
+
     }
 
     @Override
@@ -403,5 +430,9 @@ public class MainActivity extends AppCompatActivity implements
 
     public void setHandler(Handler handler) {
         this.UIHandler= handler;
+    }
+
+    public void resetUserImg() {
+        img_avatar.setImageResource(R.mipmap.tourist);
     }
 }

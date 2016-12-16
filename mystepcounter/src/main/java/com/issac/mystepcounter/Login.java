@@ -1,5 +1,6 @@
 package com.issac.mystepcounter;
 
+import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
@@ -26,13 +28,16 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.issac.mystepcounter.fragment.FragmentUser;
 import com.issac.mystepcounter.pojo.User;
 import com.issac.mystepcounter.utils.*;
 import com.issac.mystepcounter.utils.AvatarEdit;
 import com.issac.mystepcounter.view.CircleImageView;
+import com.issac.mystepcounter.view.LoginLayout;
 import com.issac.mystepcounter.view.MyPopupWindow;
 
 import java.io.File;
@@ -49,8 +54,10 @@ import cn.bmob.v3.listener.DownloadFileListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadFileListener;
 
-public class Login extends AppCompatActivity implements ViewPager.OnPageChangeListener,TextView.OnEditorActionListener{
+public class Login extends AppCompatActivity implements ViewPager.OnPageChangeListener,LoginLayout.CompleteListener{
     private LinearLayout layout_login;
+    private LoginLayout loginLayout;
+    private LoginLayout registerLayout;
     private TabLayout tabs;
     private ViewPager pagers;
     private List<View> views;
@@ -102,6 +109,7 @@ public class Login extends AppCompatActivity implements ViewPager.OnPageChangeLi
 
     private void initWidget() {
         layout_login = (LinearLayout) findViewById(R.id.activity_login);
+
         LayoutInflater inflater = LayoutInflater.from(this);
         View login = inflater.inflate(R.layout.login,null);
         View register = inflater.inflate(R.layout.register,null);
@@ -119,7 +127,8 @@ public class Login extends AppCompatActivity implements ViewPager.OnPageChangeLi
 
         passwordForget = (TextView) login.findViewById(R.id.password_forget);
         btnReg = (Button) login.findViewById(R.id.login_register_btn);
-
+        loginLayout = (LoginLayout) login.findViewById(R.id.login_login_layout);
+        registerLayout = (LoginLayout) register.findViewById(R.id.login_register_layout);
         regUsername = (TextInputEditText) register.findViewById(R.id.register_username);
         regPassword = (TextInputEditText) register.findViewById(R.id.register_password_1);
         regPasswordRepeat = (TextInputEditText) register.findViewById(R.id.register_password_2);
@@ -131,6 +140,8 @@ public class Login extends AppCompatActivity implements ViewPager.OnPageChangeLi
     }
 
     private void initData() {
+        loginLayout.addCompleteListener(this);
+        registerLayout.addCompleteListener(this);
         comeIntent = getIntent();
         file = new File(Environment.getExternalStorageDirectory(),"temp.jpg");
         file.delete();
@@ -143,7 +154,6 @@ public class Login extends AppCompatActivity implements ViewPager.OnPageChangeLi
         pagers.setAdapter(adapter);
         pagers.addOnPageChangeListener(this);
         tabs.setupWithViewPager(pagers);
-        username.setOnEditorActionListener(this);
         btnLogin.setOnClickListener(onClickListener);
         passwordForget.setOnClickListener(onClickListener);
         btnReg.setOnClickListener(onClickListener);
@@ -183,7 +193,7 @@ public class Login extends AppCompatActivity implements ViewPager.OnPageChangeLi
             @Override
             public void done(String s, BmobException e) {
                 if (e == null){
-                    regAvatar.setImageBitmap(AppContext.getBitmapByUrl(s));
+                    //regAvatar.setImageBitmap(AppContext.getBitmapByUrl(s));
                     newUser.setAvatar(file);
                 }
             }
@@ -250,11 +260,24 @@ public class Login extends AppCompatActivity implements ViewPager.OnPageChangeLi
             username.requestFocus();
             username.setCursorVisible(true);
             inputMethodManager.showSoftInput(username, 0);
+            //setElevation(5f);
         }else{
             regUsername.requestFocus();
             regUsername.setCursorVisible(true);
             inputMethodManager.showSoftInput(regUsername, 0);
+            //resetElevation();
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setElevation(float dp) {
+        float px = AppContext.dip2px(this,dp);
+        tabs.setElevation(px);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void resetElevation(){
+        tabs.setElevation(0f);
     }
 
     @Override
@@ -262,22 +285,6 @@ public class Login extends AppCompatActivity implements ViewPager.OnPageChangeLi
 
     }
 
-    @Override
-    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        if (actionId == EditorInfo.IME_ACTION_NEXT){
-            switch (v.getId()){
-                case R.id.login_username:
-                    Log.e(AppContext.Tag,v.getId()+":"+R.id.login_username);
-                    v.clearFocus();
-                    password.setFocusable(true);
-                    password.setFocusableInTouchMode(true);
-                    password.requestFocus();
-                    password.setCursorVisible(true);
-                    break;
-            }
-        }
-        return false;
-    }
 
     class MyPagerAdapter extends PagerAdapter{
         @Override
@@ -328,6 +335,46 @@ public class Login extends AppCompatActivity implements ViewPager.OnPageChangeLi
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.login_btn:
+                    doComplete(loginLayout);
+                case R.id.password_forget:
+                    break;
+                case R.id.login_register_btn:
+                    tabs.getTabAt(1).select();
+                    regUsername.requestFocus();
+                    regUsername.setCursorVisible(true);
+                    break;
+                case R.id.register_register_btn:
+                    doComplete(registerLayout);
+                    break;
+                case R.id.user_register_avatar:
+                    window = new MyPopupWindow(Login.this,this,MyPopupWindow.TYPE_AVATAR);
+                    window.setAnimationStyle(R.style.PopupAnimation);
+                    window.showAtLocation(layout_login, Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL,0,0);
+                    View view = getCurrentFocus();
+                    inputMethodManager.hideSoftInputFromWindow(getWindow().getDecorView().getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+                    break;
+                case R.id.pick_pic:
+                    window.dismiss();
+                    Intent albumintent = new Intent(Intent.ACTION_PICK,null);
+                    albumintent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*");
+                    startActivityForResult(albumintent,ALBUM_OK);
+                    break;
+                case R.id.pick_camera:
+                    window.dismiss();
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+                    startActivityForResult(intent,CAMERA_OK);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+        @Override
+        public void doComplete(View view) {
+            switch (view.getId()){
+                case R.id.login_login_layout:
                     User user = new User();
                     //Toast.makeText(getApplicationContext(),user.getAvatar().getFilename(),Toast.LENGTH_LONG).show();
                     user.setUsername(username.getText().toString());
@@ -336,11 +383,9 @@ public class Login extends AppCompatActivity implements ViewPager.OnPageChangeLi
                         @Override
                         public void done(User user1, BmobException e) {
                             if (e == null) {
-                                Toast.makeText(getApplicationContext(), AppContext.avatarFileName, Toast.LENGTH_SHORT).show();
                                 BmobFile file = BmobUser.getCurrentUser(User.class).getAvatar();
                                 AppContext.avatarFileName = File.separator+file.getFilename();
                                 AppContext.putString(AppContext.AVATAR,AppContext.avatarFileName);
-                                Toast.makeText(getApplicationContext(), AppContext.avatarFileName, Toast.LENGTH_SHORT).show();
                                 File dir = new File(getFilesDir(),AppContext.avatarFileName);
                                 file.download(dir, new DownloadFileListener() {
                                     @Override
@@ -362,18 +407,12 @@ public class Login extends AppCompatActivity implements ViewPager.OnPageChangeLi
                         }
                     });
                     break;
-                case R.id.password_forget:
-                    break;
-                case R.id.login_register_btn:
-                    tabs.getTabAt(1).select();
-                    regUsername.requestFocus();
-                    regUsername.setCursorVisible(true);
-                    break;
-                case R.id.register_register_btn:
+                case R.id.login_register_layout:
                     if (isInputValid(regUsername,regPassword,regEmail) && repeat){
                         newUser.setUsername(regUsername.getText().toString());
                         newUser.setPassword(regPassword.getText().toString());
                         newUser.setEmail(regEmail.getText().toString());
+                        AppContext.putString("password",regPassword.getText().toString());
                         if (!changed){
                             initNewUserAvatar();
                         }
@@ -382,10 +421,39 @@ public class Login extends AppCompatActivity implements ViewPager.OnPageChangeLi
                             public void done(User user, BmobException e) {
                                 if (e == null){
                                     Toast.makeText(Login.this,"注册成功",Toast.LENGTH_SHORT).show();
-                                    setResult(RESULT_OK,comeIntent);
-                                    AppContext.putString(AppContext.AVATAR,AppContext.avatarFileName);
-                                    AppContext.HASUSER = true;
-                                    finish();
+                                    AppContext.putString("id",user.getObjectId());
+                                    User currentUser = BmobUser.getCurrentUser(User.class);
+                                    currentUser.setObjectId(user.getObjectId());
+                                    BmobUser.getCurrentUser(User.class).setObjectId(user.getObjectId());
+                                    Log.e(AppContext.Tag,"id:"+BmobUser.getCurrentUser(User.class).getObjectId()+"id:"+user.getObjectId());
+                                    newUser.login(new SaveListener<User>() {
+                                        @Override
+                                        public void done(User user1, BmobException e) {
+                                            if (e == null) {
+                                                BmobFile file = BmobUser.getCurrentUser(User.class).getAvatar();
+                                                AppContext.avatarFileName = File.separator+file.getFilename();
+                                                AppContext.putString(AppContext.AVATAR,AppContext.avatarFileName);
+                                                File dir = new File(getFilesDir(),AppContext.avatarFileName);
+                                                file.download(dir, new DownloadFileListener() {
+                                                    @Override
+                                                    public void done(String s, BmobException e) {
+                                                        setResult(RESULT_OK,comeIntent);
+                                                        AppContext.HASUSER = true;
+                                                        finish();
+                                                    }
+
+                                                    @Override
+                                                    public void onProgress(Integer integer, long l) {
+
+                                                    }
+                                                });
+
+                                            }else{
+                                                Toast.makeText(getApplicationContext(),e.getErrorCode()+e.getMessage(),Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    });
+                                    /**/
                                 }else{
                                     Toast.makeText(Login.this,"注册失败，请检查输入，并稍后重试",Toast.LENGTH_SHORT).show();
                                     Log.e("regError",e.getErrorCode()+":"+e.getMessage());
@@ -396,28 +464,8 @@ public class Login extends AppCompatActivity implements ViewPager.OnPageChangeLi
                         Toast.makeText(Login.this,"输入有误，请检查输入",Toast.LENGTH_LONG).show();
                     }
                     break;
-                case R.id.user_register_avatar:
-                    window = new MyPopupWindow(Login.this,this,MyPopupWindow.TYPE_AVATAR);
-                    window.setAnimationStyle(R.style.PopupAnimation);
-                    window.showAtLocation(layout_login, Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL,0,0);
-                    break;
-                case R.id.pick_pic:
-                    window.dismiss();
-                    Intent albumintent = new Intent(Intent.ACTION_PICK,null);
-                    albumintent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*");
-                    startActivityForResult(albumintent,ALBUM_OK);
-                    break;
-                case R.id.pick_camera:
-                    window.dismiss();
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-                    startActivityForResult(intent,CAMERA_OK);
-                    break;
-                default:
-                    break;
             }
         }
-    }
 
     class MyOnFocusChangeListener implements View.OnFocusChangeListener{
 

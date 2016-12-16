@@ -50,7 +50,7 @@ public class AvatarEdit {
                                     Log.i("changed","s="+s);
                                     avatarView.setImageBitmap(AppContext.getBitmapByUrl(s));
                                 }else{
-                                    Toast.makeText(context,"e="+e.getErrorCode()+":"+e.getMessage(),Toast.LENGTH_LONG).show();
+                                    //Toast.makeText(context,"e="+e.getErrorCode()+":"+e.getMessage(),Toast.LENGTH_LONG).show();
                                 }
                             }
 

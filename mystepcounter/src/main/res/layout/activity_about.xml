@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_about"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.issac.mystepcounter.view.AboutA">
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="@color/background"
+
+        >
+        <FrameLayout
+            android:id="@+id/login_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/about_back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center|start"
+                android:tint="@android:color/white"
+                android:src="@mipmap/back"/>
+
+        </FrameLayout>
+
+        <TextView
+            android:layout_gravity="center"
+            android:text="@string/app_name"
+            android:textSize="25sp"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+    </android.support.v7.widget.Toolbar>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/about_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/about_app"
+            android:textSize="20sp"
+            />
+    </FrameLayout>
+</LinearLayout>

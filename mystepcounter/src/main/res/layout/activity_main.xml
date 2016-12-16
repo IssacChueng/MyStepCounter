@@ -14,6 +14,8 @@
         android:paddingBottom="6dp"
         android:id="@+id/user_info_title"
         android:background="@color/background"
+        android:elevation="5dp"
+        android:translationZ="5dp"
         >
         <FrameLayout
             android:layout_width="match_parent"
@@ -57,6 +59,8 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@drawable/tabbg"
+        android:elevation="5dp"
+        android:translationZ="5dp"
         android:orientation="horizontal">
         <com.issac.mystepcounter.view.ChangeColorWithIconView
             android:id="@+id/homepage"
